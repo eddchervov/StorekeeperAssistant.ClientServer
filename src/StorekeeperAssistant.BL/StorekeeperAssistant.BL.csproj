@@ -13,8 +13,4 @@
     <ProjectReference Include="..\StorekeeperAssistant.DAL\StorekeeperAssistant.DAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\Implementation\" />
-  </ItemGroup>
-
 </Project>

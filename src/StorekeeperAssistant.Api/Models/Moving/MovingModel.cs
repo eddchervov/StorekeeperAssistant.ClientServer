@@ -1,11 +1,13 @@
 ﻿using StorekeeperAssistant.Api.Enum;
+using StorekeeperAssistant.Api.Models.InventoryItem;
+using StorekeeperAssistant.Api.Models.Warehouse;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace StorekeeperAssistant.DAL.Entities
+namespace StorekeeperAssistant.Api.Models.Moving
 {
-    public class Moving
+    public class MovingModel
     {
         public int Id { get; set; }
         /// <summary>
@@ -15,12 +17,15 @@ namespace StorekeeperAssistant.DAL.Entities
         /// <summary>
         /// Склад отправления
         /// </summary>
-        public int DepartureWarehouseId { get; set; }
+        public WarehouseModel DepartureWarehouse { get; set; }
         /// <summary>
         /// Склад прибытия
         /// </summary>
-        public int ArrivalWarehouseId { get; set; }
+        public WarehouseModel ArrivalWarehouse { get; set; }
+        /// <summary>
+        /// ТМЦ
+        /// </summary>
+        public List<InventoryItemModel> InventoryItemModels { get; set; } = new List<InventoryItemModel>();
         public DateTime DateTime { get; set; }
-        public bool IsActive { get; set; }
     }
 }

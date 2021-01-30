@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StorekeeperAssistant.BL.Services;
+using StorekeeperAssistant.BL.Services.Implementation;
 using System;
 
 namespace StorekeeperAssistant.BL
@@ -8,7 +10,7 @@ namespace StorekeeperAssistant.BL
     {
         public static void AddCustomBLServices(this IServiceCollection services, IConfiguration configuration)
         {
-            //services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IMovingService, MovingService>();
 
         }
     }

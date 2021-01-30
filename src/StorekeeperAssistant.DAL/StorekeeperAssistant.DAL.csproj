@@ -10,10 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\StorekeeperAssistant.Api\StorekeeperAssistant.Api.csproj" />
   </ItemGroup>
 
