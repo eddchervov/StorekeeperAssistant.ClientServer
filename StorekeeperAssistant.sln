@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorekeeperAssistant.WebApi", "src\StorekeeperAssistant.WebApi\StorekeeperAssistant.WebApi.csproj", "{1035525A-BB26-4B8E-BB92-709F9DC39F6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorekeeperAssistant.WebApi", "src\StorekeeperAssistant.WebApi\StorekeeperAssistant.WebApi.csproj", "{1035525A-BB26-4B8E-BB92-709F9DC39F6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorekeeperAssistant.DAL", "src\StorekeeperAssistant.DAL\StorekeeperAssistant.DAL.csproj", "{5A7D95F2-E077-4DAF-8617-8E1358DE2DCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorekeeperAssistant.DAL", "src\StorekeeperAssistant.DAL\StorekeeperAssistant.DAL.csproj", "{5A7D95F2-E077-4DAF-8617-8E1358DE2DCF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorekeeperAssistant.Api", "src\StorekeeperAssistant.Api\StorekeeperAssistant.Api.csproj", "{83FB7A00-80B5-4534-A4DD-11E98A79A23E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorekeeperAssistant.Api", "src\StorekeeperAssistant.Api\StorekeeperAssistant.Api.csproj", "{83FB7A00-80B5-4534-A4DD-11E98A79A23E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorekeeperAssistant.BL", "src\StorekeeperAssistant.BL\StorekeeperAssistant.BL.csproj", "{E7DF5BEC-FCE1-492D-ADE8-A30F3B351873}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorekeeperAssistant.BL", "src\StorekeeperAssistant.BL\StorekeeperAssistant.BL.csproj", "{E7DF5BEC-FCE1-492D-ADE8-A30F3B351873}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7A5AD807-1D7F-44EC-AF29-56B522B8CA2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorekeeperAssistant.loCConfig", "src\StorekeeperAssistant.loCConfig\StorekeeperAssistant.loCConfig.csproj", "{4BE56CD3-AFDD-413A-8650-74794CBB967C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorekeeperAssistant.loCConfig", "src\StorekeeperAssistant.loCConfig\StorekeeperAssistant.loCConfig.csproj", "{4BE56CD3-AFDD-413A-8650-74794CBB967C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorekeeperAssistant.WebApp", "src\StorekeeperAssistant.WebApp\StorekeeperAssistant.WebApp.csproj", "{BA8DE30D-A859-49F0-9601-757C6B30E1CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{4BE56CD3-AFDD-413A-8650-74794CBB967C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BE56CD3-AFDD-413A-8650-74794CBB967C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BE56CD3-AFDD-413A-8650-74794CBB967C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA8DE30D-A859-49F0-9601-757C6B30E1CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA8DE30D-A859-49F0-9601-757C6B30E1CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA8DE30D-A859-49F0-9601-757C6B30E1CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA8DE30D-A859-49F0-9601-757C6B30E1CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

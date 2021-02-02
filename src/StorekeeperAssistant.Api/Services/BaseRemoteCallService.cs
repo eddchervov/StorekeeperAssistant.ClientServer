@@ -142,6 +142,8 @@ namespace StorekeeperAssistant.Api.Services
                 url = stringBuilder.ToString();
             }
 
+            url = url.Replace("%2f", "/");
+
             return url;
         }
 

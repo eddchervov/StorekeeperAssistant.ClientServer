@@ -10,8 +10,8 @@ namespace StorekeeperAssistant.DAL.DBContext
     {
         DbSet<Warehouse> Warehouses { get; set; }
         DbSet<Nomenclature> Nomenclatures { get; set; }
-        DbSet<InventoryItem> InventoryItems { get; set; }
         DbSet<Moving> Movings { get; set; }
-        DbSet<MovingInventoryItems> MovingInventoryItems { get; set; }
+        DbSet<MovingDetail> MovingDetails { get; set; }
+        DbSet<WarehouseInventoryItem> WarehouseInventoryItems { get; set; }
     }
 }

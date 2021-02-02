@@ -1,5 +1,6 @@
-﻿using StorekeeperAssistant.Api.Enum;
-using StorekeeperAssistant.Api.Models.InventoryItem;
+﻿using StorekeeperAssistant.Api.Models.InventoryItem;
+using StorekeeperAssistant.Api.Models.MovingDetail;
+using StorekeeperAssistant.Api.Models.Nomenclature;
 using StorekeeperAssistant.Api.Models.Warehouse;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,8 @@ namespace StorekeeperAssistant.Api.Models.Moving
     public class MovingModel
     {
         public int Id { get; set; }
-        /// <summary>
-        /// Тип операции - приход/расход
-        /// </summary>
-        public TypeTransactionEnum TypeTransaction { get; set; }
+        public List<MovingDetailModel> MovingDetailModels { get; set; } = new List<MovingDetailModel>();
+
         /// <summary>
         /// Склад отправления
         /// </summary>
@@ -22,10 +21,6 @@ namespace StorekeeperAssistant.Api.Models.Moving
         /// Склад прибытия
         /// </summary>
         public WarehouseModel ArrivalWarehouse { get; set; }
-        /// <summary>
-        /// ТМЦ
-        /// </summary>
-        public List<InventoryItemModel> InventoryItemModels { get; set; } = new List<InventoryItemModel>();
         public DateTime DateTime { get; set; }
     }
 }

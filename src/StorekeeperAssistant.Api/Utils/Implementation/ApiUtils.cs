@@ -34,7 +34,11 @@ namespace StorekeeperAssistant.Api.Utils.Implementation
         {
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                if (string.IsNullOrEmpty(accessToken) == false)
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                }
+
                 if (timeout.HasValue)
                 {
                     client.Timeout = TimeSpan.FromMilliseconds(timeout.Value);

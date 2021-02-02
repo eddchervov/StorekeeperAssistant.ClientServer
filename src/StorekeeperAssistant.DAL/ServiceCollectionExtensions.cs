@@ -28,7 +28,12 @@ namespace StorekeeperAssistant.DAL
         {
             services.AddScoped<IMovingRepository, MovingRepository>();
             services.AddScoped<IWarehouseRepository, WarehouseRepository>();
-            services.AddScoped<IMovingInventoryItemsRepository, MovingInventoryItemsRepository>();
+            services.AddScoped<IWarehouseInventoryItemRepository, WarehouseInventoryItemRepository>();
+            services.AddScoped<INomenclatureRepository, NomenclatureRepository>();
+            services.AddScoped<IMovingDetailRepository, MovingDetailRepository>();
+            
+
+
         }
     }
 }

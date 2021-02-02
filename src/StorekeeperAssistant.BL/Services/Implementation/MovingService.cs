@@ -1,14 +1,12 @@
-﻿using StorekeeperAssistant.Api.Models.InventoryItem;
-using StorekeeperAssistant.Api.Models.Moving;
+﻿using StorekeeperAssistant.Api.Models.Moving;
+using StorekeeperAssistant.Api.Models.MovingDetail;
 using StorekeeperAssistant.Api.Models.Nomenclature;
 using StorekeeperAssistant.Api.Models.Warehouse;
+using StorekeeperAssistant.DAL.DBContext;
 using StorekeeperAssistant.DAL.Entities;
-using StorekeeperAssistant.DAL.Models;
 using StorekeeperAssistant.DAL.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace StorekeeperAssistant.BL.Services.Implementation
@@ -17,15 +15,24 @@ namespace StorekeeperAssistant.BL.Services.Implementation
     {
         private readonly IMovingRepository _movingRepository;
         private readonly IWarehouseRepository _warehouseRepository;
-        private readonly IMovingInventoryItemsRepository _movingInventoryItemsRepository;
+        private readonly IWarehouseInventoryItemRepository _warehouseInventoryItemRepository;
+        private readonly INomenclatureRepository _nomenclatureRepository;
+        private readonly IMovingDetailRepository _movingDetailRepository;
+        private readonly IAppDBContext _appDBContext;
 
         public MovingService(IMovingRepository movingRepository,
             IWarehouseRepository warehouseRepository,
-            IMovingInventoryItemsRepository movingInventoryItemsRepository)
+            IWarehouseInventoryItemRepository warehouseInventoryItemRepository,
+            INomenclatureRepository nomenclatureRepository,
+            IMovingDetailRepository movingDetailRepository,
+            IAppDBContext appDBContext)
         {
             _movingRepository = movingRepository;
             _warehouseRepository = warehouseRepository;
-            _movingInventoryItemsRepository = movingInventoryItemsRepository;
+            _warehouseInventoryItemRepository = warehouseInventoryItemRepository;
+            _nomenclatureRepository = nomenclatureRepository;
+            _movingDetailRepository = movingDetailRepository;
+            _appDBContext = appDBContext;
         }
 
         public async Task<GetMovingResponse> GetMovingsAsync(GetMovingRequest request)
@@ -42,34 +49,223 @@ namespace StorekeeperAssistant.BL.Services.Implementation
             return response;
         }
 
-        private async Task<MovingModel> ConvertModelAsync(Moving moving)
+        public async Task<CreateMovingResponse> CreateMovingAsync(CreateMovingRequest request)
         {
-            var inventoryItemsDALModels = await _movingInventoryItemsRepository.GetInventoryItemsByMovingIdAsync(moving.Id);
+            var response = new CreateMovingResponse { IsSuccess = true, Message = string.Empty };
+            var utcNow = DateTime.UtcNow;
 
-            var movingModelm = new MovingModel
+            try
             {
-                Id = moving.Id,
-                TypeTransaction = moving.TypeTransaction,
-                DateTime = moving.DateTime,
-                ArrivalWarehouse = await ConvertModelAsync(moving.ArrivalWarehouseId),
-                DepartureWarehouse = await ConvertModelAsync(moving.ArrivalWarehouseId),
-                InventoryItemModels = inventoryItemsDALModels.Select(ConvertModel).ToList()
-            };
+                using var transaction = _appDBContext.BeginTransaction();
 
-            return movingModelm;
+                Warehouse departureWarehouse = null;
+                if (request.DepartureWarehouseId != null)
+                    departureWarehouse = await _warehouseRepository.GetByIdAsync(request.DepartureWarehouseId.Value);
+
+                Warehouse arrivalWarehouse = null;
+                if (request.ArrivalWarehouseId != null)
+                    arrivalWarehouse = await _warehouseRepository.GetByIdAsync(request.ArrivalWarehouseId.Value);
+
+                var moving = new Moving
+                {
+                    DepartureWarehouseId = departureWarehouse?.Id,
+                    ArrivalWarehouseId = arrivalWarehouse?.Id,
+                    IsActive = true,
+                    DateTime = utcNow
+                };
+
+                await _movingRepository.InsertAsync(moving);
+
+                foreach (var ii in request.CreateInventoryItemModels)
+                {
+                    var nomenclature = await _nomenclatureRepository.GetByIdAsync(ii.Id);
+
+                    var movingDetail = new MovingDetail
+                    {
+                        MovingId = moving.Id,
+                        NomenclatureId = nomenclature.Id,
+                        Count = ii.Count
+                    };
+
+                    await _movingDetailRepository.InsertAsync(movingDetail);
+
+                    // Расход
+                    if (departureWarehouse != null)
+                    {
+                        var departureWarehouseInventoryItem = await _warehouseInventoryItemRepository.GetLastByWarehouseIdAndNomenclatureIdAsync(departureWarehouse.Id, nomenclature.Id);
+                        var newCountDeparture = departureWarehouseInventoryItem.Count - ii.Count;
+
+                        var newDepartureWarehouseInventoryItem = new WarehouseInventoryItem
+                        {
+                            NomenclatureId = nomenclature.Id,
+                            DateTime = utcNow,
+                            Count = newCountDeparture,
+                            WarehouseId = departureWarehouse.Id,
+                            MovingId = moving.Id,
+                            IsActive = true
+                        };
+                        await _warehouseInventoryItemRepository.InsertAsync(newDepartureWarehouseInventoryItem);
+                    }
+
+                    // Приход
+                    if (arrivalWarehouse != null)
+                    {
+                        var newCountArrival = ii.Count;
+                        var arrivalWarehouseInventoryItem = await _warehouseInventoryItemRepository.GetLastByWarehouseIdAndNomenclatureIdAsync(arrivalWarehouse.Id, nomenclature.Id);
+                        if (arrivalWarehouseInventoryItem != null)
+                            newCountArrival = arrivalWarehouseInventoryItem.Count + ii.Count;
+
+                        var newArrivalWarehouseInventoryItem = new WarehouseInventoryItem
+                        {
+                            NomenclatureId = nomenclature.Id,
+                            DateTime = utcNow,
+                            Count = newCountArrival,
+                            WarehouseId = arrivalWarehouse.Id,
+                            MovingId = moving.Id,
+                            IsActive = true
+                        };
+                        await _warehouseInventoryItemRepository.InsertAsync(newArrivalWarehouseInventoryItem);
+                    }
+                }
+
+                await transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ex.ToString();
+                return response;
+            }
+
+            return response;
         }
 
-        private InventoryItemModel ConvertModel(InventoryItemsDALModel inventoryItemsDALModel)
+        public async Task<DeleteMovingResponse> DeleteMovingAsync(DeleteMovingRequest request)
         {
-            return new InventoryItemModel
+            var response = new DeleteMovingResponse { IsSuccess = true, Message = string.Empty };
+
+            try
             {
-                Id = inventoryItemsDALModel.Id,
-                NomenclatureModel = new NomenclatureModel
+                using var transaction = _appDBContext.BeginTransaction();
+
+                var moving = await _movingRepository.GetByIdAsync(request.MovingId);
+
+                Warehouse departureWarehouse = null;
+                if (moving.DepartureWarehouseId != null)
+                    departureWarehouse = await _warehouseRepository.GetByIdAsync(moving.DepartureWarehouseId.Value);
+
+                Warehouse arrivalWarehouse = null;
+                if (moving.ArrivalWarehouseId != null)
+                    arrivalWarehouse = await _warehouseRepository.GetByIdAsync(moving.ArrivalWarehouseId.Value);
+
+                moving.IsActive = false;
+
+                await _movingRepository.UpdateAsync(moving);
+
+                var movingDetails = await _movingDetailRepository.GetByMovingIdAsync(moving.Id);
+
+                foreach (var movingDetail in movingDetails)
                 {
-                    Id = inventoryItemsDALModel.NomenclatureDALModel.Id,
-                    Name = inventoryItemsDALModel.NomenclatureDALModel.Name
+                    var nomenclature = await _nomenclatureRepository.GetByIdAsync(movingDetail.NomenclatureId);
+
+                    WarehouseInventoryItem departureWarehouseInventoryItem = null;
+                    if (departureWarehouse != null)
+                    {
+                        departureWarehouseInventoryItem = await _warehouseInventoryItemRepository.GetByMovingIdAsync(moving.Id, departureWarehouse.Id, nomenclature.Id);
+                        departureWarehouseInventoryItem.IsActive = false;
+                        departureWarehouseInventoryItem.Count = departureWarehouseInventoryItem.Count - movingDetail.Count;
+                        await _warehouseInventoryItemRepository.UpdateAsync(departureWarehouseInventoryItem);
+
+                        var editWarehouseInventoryItems = await _warehouseInventoryItemRepository.GetByPeriodAsync(departureWarehouse.Id, nomenclature.Id, departureWarehouseInventoryItem.DateTime, DateTime.UtcNow);
+                        foreach (var editWarehouseInventoryItem in editWarehouseInventoryItems)
+                        {
+                            editWarehouseInventoryItem.Count = editWarehouseInventoryItem.Count + movingDetail.Count;
+                            if (editWarehouseInventoryItem.Count < 1)
+                            {
+                                editWarehouseInventoryItem.IsActive = false;
+                            }
+                            await _warehouseInventoryItemRepository.UpdateAsync(editWarehouseInventoryItem);
+                        }
+                    }
+
+                    WarehouseInventoryItem arrivalWarehouseInventoryItem = null;
+                    if (arrivalWarehouse != null)
+                    {
+                        arrivalWarehouseInventoryItem = await _warehouseInventoryItemRepository.GetByMovingIdAsync(moving.Id, arrivalWarehouse.Id, nomenclature.Id);
+                        arrivalWarehouseInventoryItem.Count = arrivalWarehouseInventoryItem.Count - movingDetail.Count;
+                        arrivalWarehouseInventoryItem.IsActive = false;
+
+                        await _warehouseInventoryItemRepository.UpdateAsync(arrivalWarehouseInventoryItem);
+
+                        var editWarehouseInventoryItems = await _warehouseInventoryItemRepository.GetByPeriodAsync(arrivalWarehouse.Id, nomenclature.Id, arrivalWarehouseInventoryItem.DateTime, DateTime.UtcNow);
+                        foreach (var editWarehouseInventoryItem in editWarehouseInventoryItems)
+                        {
+                            var count = editWarehouseInventoryItem.Count - movingDetail.Count;
+                            if (count <= 0) 
+                            {
+                                response.IsSuccess = false;
+                                response.Message = $"Сначало удалите перемещения, на складе недостаточно товаров для удаления перемещения";
+                                return response;
+                            }
+
+                            await _warehouseInventoryItemRepository.UpdateAsync(editWarehouseInventoryItem);
+                        }
+                    }
+
                 }
+
+                await transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = ex.ToString();
+                return response;
+            }
+
+            return response;
+        }
+
+        private async Task<MovingModel> ConvertModelAsync(Moving moving)
+        {
+            WarehouseModel arrivalWarehouse = null;
+            if (moving.ArrivalWarehouseId != null)
+                arrivalWarehouse = await ConvertModelAsync(moving.ArrivalWarehouseId.Value);
+
+            WarehouseModel departureWarehouse = null;
+            if (moving.DepartureWarehouseId != null)
+                departureWarehouse = await ConvertModelAsync(moving.DepartureWarehouseId.Value);
+
+            var movingDetailModels = new List<MovingDetailModel>();
+            var movingDetails = await _movingDetailRepository.GetByMovingIdAsync(moving.Id);
+            foreach (var movingDetail in movingDetails)
+            {
+                var nomenclature = await _nomenclatureRepository.GetByIdAsync(movingDetail.NomenclatureId);
+
+                var movingDetailModel = new MovingDetailModel
+                {
+                    Id = movingDetail.Id,
+                    Count = movingDetail.Count,
+                    NomenclatureModel = new NomenclatureModel
+                    {
+                        Id = nomenclature.Id,
+                        Name = nomenclature.Name
+                    }
+                };
+
+                movingDetailModels.Add(movingDetailModel);
+            }
+
+            var movingModel = new MovingModel
+            {
+                Id = moving.Id,
+                DateTime = moving.DateTime,
+                ArrivalWarehouse = arrivalWarehouse,
+                DepartureWarehouse = departureWarehouse,
+                MovingDetailModels = movingDetailModels
             };
+
+            return movingModel;
         }
 
         private async Task<WarehouseModel> ConvertModelAsync(int warehouseId)

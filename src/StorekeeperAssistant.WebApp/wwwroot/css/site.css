@@ -1,0 +1,13 @@
+﻿
+/*=========================================================
+        vue-ctk-date-time-picker
+===========================================================*/
+.date-input-vue-ctk {
+    padding-top: 0 !important;
+}
+
+    .date-input-vue-ctk .field-input {
+        padding-top: 0 !important;
+        height: 31px !important;
+        min-height: 25px !important;
+    }
