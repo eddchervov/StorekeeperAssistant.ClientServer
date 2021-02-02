@@ -12,10 +12,14 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorekeeperAssistant.BL", "src\StorekeeperAssistant.BL\StorekeeperAssistant.BL.csproj", "{E7DF5BEC-FCE1-492D-ADE8-A30F3B351873}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7A5AD807-1D7F-44EC-AF29-56B522B8CA2F}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorekeeperAssistant.loCConfig", "src\StorekeeperAssistant.loCConfig\StorekeeperAssistant.loCConfig.csproj", "{4BE56CD3-AFDD-413A-8650-74794CBB967C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorekeeperAssistant.WebApp", "src\StorekeeperAssistant.WebApp\StorekeeperAssistant.WebApp.csproj", "{BA8DE30D-A859-49F0-9601-757C6B30E1CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorekeeperAssistant.WebApp", "src\StorekeeperAssistant.WebApp\StorekeeperAssistant.WebApp.csproj", "{BA8DE30D-A859-49F0-9601-757C6B30E1CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
