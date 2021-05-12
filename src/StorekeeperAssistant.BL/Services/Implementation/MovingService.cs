@@ -49,95 +49,15 @@ namespace StorekeeperAssistant.BL.Services.Implementation
             return response;
         }
 
-        public async Task<CreateMovingResponse> CreateMovingAsync(CreateMovingRequest request)
+        private async Task<WarehouseInventoryItem> UpdateWarehouseInventoryItemAsync(int movingId, int warehouseId, int nomenclatureId, int movingDetailCount)
         {
-            var response = new CreateMovingResponse { IsSuccess = true, Message = string.Empty };
-            var utcNow = DateTime.UtcNow;
+            WarehouseInventoryItem warehouseInventoryItem = await _warehouseInventoryItemRepository.GetByMovingIdAsync(movingId, warehouseId, nomenclatureId);
+            warehouseInventoryItem.IsActive = false;
+            warehouseInventoryItem.Count -= movingDetailCount;
 
-            try
-            {
-                using var transaction = _appDBContext.BeginTransaction();
+            await _warehouseInventoryItemRepository.UpdateAsync(warehouseInventoryItem);
 
-                Warehouse departureWarehouse = null;
-                if (request.DepartureWarehouseId != null)
-                    departureWarehouse = await _warehouseRepository.GetByIdAsync(request.DepartureWarehouseId.Value);
-
-                Warehouse arrivalWarehouse = null;
-                if (request.ArrivalWarehouseId != null)
-                    arrivalWarehouse = await _warehouseRepository.GetByIdAsync(request.ArrivalWarehouseId.Value);
-
-                var moving = new Moving
-                {
-                    DepartureWarehouseId = departureWarehouse?.Id,
-                    ArrivalWarehouseId = arrivalWarehouse?.Id,
-                    IsActive = true,
-                    DateTime = utcNow
-                };
-
-                await _movingRepository.InsertAsync(moving);
-
-                foreach (var ii in request.CreateInventoryItemModels)
-                {
-                    var nomenclature = await _nomenclatureRepository.GetByIdAsync(ii.Id);
-
-                    var movingDetail = new MovingDetail
-                    {
-                        MovingId = moving.Id,
-                        NomenclatureId = nomenclature.Id,
-                        Count = ii.Count
-                    };
-
-                    await _movingDetailRepository.InsertAsync(movingDetail);
-
-                    // Расход
-                    if (departureWarehouse != null)
-                    {
-                        var departureWarehouseInventoryItem = await _warehouseInventoryItemRepository.GetLastByWarehouseIdAndNomenclatureIdAsync(departureWarehouse.Id, nomenclature.Id);
-                        var newCountDeparture = departureWarehouseInventoryItem.Count - ii.Count;
-
-                        var newDepartureWarehouseInventoryItem = new WarehouseInventoryItem
-                        {
-                            NomenclatureId = nomenclature.Id,
-                            DateTime = utcNow,
-                            Count = newCountDeparture,
-                            WarehouseId = departureWarehouse.Id,
-                            MovingId = moving.Id,
-                            IsActive = true
-                        };
-                        await _warehouseInventoryItemRepository.InsertAsync(newDepartureWarehouseInventoryItem);
-                    }
-
-                    // Приход
-                    if (arrivalWarehouse != null)
-                    {
-                        var newCountArrival = ii.Count;
-                        var arrivalWarehouseInventoryItem = await _warehouseInventoryItemRepository.GetLastByWarehouseIdAndNomenclatureIdAsync(arrivalWarehouse.Id, nomenclature.Id);
-                        if (arrivalWarehouseInventoryItem != null)
-                            newCountArrival = arrivalWarehouseInventoryItem.Count + ii.Count;
-
-                        var newArrivalWarehouseInventoryItem = new WarehouseInventoryItem
-                        {
-                            NomenclatureId = nomenclature.Id,
-                            DateTime = utcNow,
-                            Count = newCountArrival,
-                            WarehouseId = arrivalWarehouse.Id,
-                            MovingId = moving.Id,
-                            IsActive = true
-                        };
-                        await _warehouseInventoryItemRepository.InsertAsync(newArrivalWarehouseInventoryItem);
-                    }
-                }
-
-                await transaction.CommitAsync();
-            }
-            catch (Exception ex)
-            {
-                response.IsSuccess = false;
-                response.Message = ex.ToString();
-                return response;
-            }
-
-            return response;
+            return warehouseInventoryItem;
         }
 
         public async Task<DeleteMovingResponse> DeleteMovingAsync(DeleteMovingRequest request)
@@ -149,15 +69,6 @@ namespace StorekeeperAssistant.BL.Services.Implementation
                 using var transaction = _appDBContext.BeginTransaction();
 
                 var moving = await _movingRepository.GetByIdAsync(request.MovingId);
-
-                Warehouse departureWarehouse = null;
-                if (moving.DepartureWarehouseId != null)
-                    departureWarehouse = await _warehouseRepository.GetByIdAsync(moving.DepartureWarehouseId.Value);
-
-                Warehouse arrivalWarehouse = null;
-                if (moving.ArrivalWarehouseId != null)
-                    arrivalWarehouse = await _warehouseRepository.GetByIdAsync(moving.ArrivalWarehouseId.Value);
-
                 moving.IsActive = false;
 
                 await _movingRepository.UpdateAsync(moving);
@@ -168,18 +79,18 @@ namespace StorekeeperAssistant.BL.Services.Implementation
                 {
                     var nomenclature = await _nomenclatureRepository.GetByIdAsync(movingDetail.NomenclatureId);
 
-                    WarehouseInventoryItem departureWarehouseInventoryItem = null;
-                    if (departureWarehouse != null)
+                    if (moving.DepartureWarehouseId != null)
                     {
-                        departureWarehouseInventoryItem = await _warehouseInventoryItemRepository.GetByMovingIdAsync(moving.Id, departureWarehouse.Id, nomenclature.Id);
+                        var departureWarehouseInventoryItem = await _warehouseInventoryItemRepository.GetByMovingIdAsync(moving.Id, moving.DepartureWarehouseId.Value, nomenclature.Id);
                         departureWarehouseInventoryItem.IsActive = false;
-                        departureWarehouseInventoryItem.Count = departureWarehouseInventoryItem.Count - movingDetail.Count;
+                        departureWarehouseInventoryItem.Count -= movingDetail.Count;
+
                         await _warehouseInventoryItemRepository.UpdateAsync(departureWarehouseInventoryItem);
 
-                        var editWarehouseInventoryItems = await _warehouseInventoryItemRepository.GetByPeriodAsync(departureWarehouse.Id, nomenclature.Id, departureWarehouseInventoryItem.DateTime, DateTime.UtcNow);
+                        var editWarehouseInventoryItems = await _warehouseInventoryItemRepository.GetByPeriodAsync(moving.DepartureWarehouseId.Value, nomenclature.Id, departureWarehouseInventoryItem.DateTime, DateTime.UtcNow);
                         foreach (var editWarehouseInventoryItem in editWarehouseInventoryItems)
                         {
-                            editWarehouseInventoryItem.Count = editWarehouseInventoryItem.Count + movingDetail.Count;
+                            editWarehouseInventoryItem.Count += movingDetail.Count;
                             if (editWarehouseInventoryItem.Count < 1)
                             {
                                 editWarehouseInventoryItem.IsActive = false;
@@ -188,20 +99,15 @@ namespace StorekeeperAssistant.BL.Services.Implementation
                         }
                     }
 
-                    WarehouseInventoryItem arrivalWarehouseInventoryItem = null;
-                    if (arrivalWarehouse != null)
+                    if (moving.ArrivalWarehouseId != null)
                     {
-                        arrivalWarehouseInventoryItem = await _warehouseInventoryItemRepository.GetByMovingIdAsync(moving.Id, arrivalWarehouse.Id, nomenclature.Id);
-                        arrivalWarehouseInventoryItem.Count = arrivalWarehouseInventoryItem.Count - movingDetail.Count;
-                        arrivalWarehouseInventoryItem.IsActive = false;
+                        var arrivalWarehouseInventoryItem = await UpdateWarehouseInventoryItemAsync(moving.Id, moving.ArrivalWarehouseId.Value, nomenclature.Id, movingDetail.Count);
 
-                        await _warehouseInventoryItemRepository.UpdateAsync(arrivalWarehouseInventoryItem);
-
-                        var editWarehouseInventoryItems = await _warehouseInventoryItemRepository.GetByPeriodAsync(arrivalWarehouse.Id, nomenclature.Id, arrivalWarehouseInventoryItem.DateTime, DateTime.UtcNow);
+                        var editWarehouseInventoryItems = await _warehouseInventoryItemRepository.GetByPeriodAsync(moving.ArrivalWarehouseId.Value, nomenclature.Id, arrivalWarehouseInventoryItem.DateTime, DateTime.UtcNow);
                         foreach (var editWarehouseInventoryItem in editWarehouseInventoryItems)
                         {
                             var count = editWarehouseInventoryItem.Count - movingDetail.Count;
-                            if (count <= 0) 
+                            if (count <= 0)
                             {
                                 response.IsSuccess = false;
                                 response.Message = $"Сначало удалите перемещения, на складе недостаточно товаров для удаления перемещения";

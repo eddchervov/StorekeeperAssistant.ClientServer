@@ -28,8 +28,8 @@ namespace StorekeeperAssistant.BL.Services.Implementation
 
             foreach (var nomenclature in nomenclaturesResponse.NomenclatureModels)
             {
-                var warehouseInventoryItem = await _warehouseInventoryItemRepository.GetLastByWarehouseIdAndNomenclatureIdAsync(request.WarehouseId, nomenclature.Id, request.DateTime);
-                if (warehouseInventoryItem != null && warehouseInventoryItem.Count != 0)
+                var warehouseInventoryItem = await _warehouseInventoryItemRepository.GetLastAsync(request.WarehouseId, nomenclature.Id, maxDateTime: request.DateTime);
+                if (warehouseInventoryItem != null)
                 {
                     var inventoryItemModel = new InventoryItemModel
                     {

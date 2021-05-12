@@ -5,6 +5,9 @@ using System.Text;
 
 namespace StorekeeperAssistant.DAL.Entities
 {
+    /// <summary>
+    /// Подробности перемещения
+    /// </summary>
     [Table("MovingDetail")]
     public class MovingDetail
     {

@@ -29,7 +29,13 @@ namespace StorekeeperAssistant.BL.Services.Implementation
         {
             var response = new BaseResponse { IsSuccess = true, Message = string.Empty };
 
-            if (request.DepartureWarehouseId == request.ArrivalWarehouseId)
+            if (request.DepartureWarehouseId == null && request.ArrivalWarehouseId == null)
+            {
+                response.IsSuccess = false;
+                response.Message = $"Не выбраны склады перемещения или расхода/прихода";
+                return response;
+            }
+            else if (request.DepartureWarehouseId == request.ArrivalWarehouseId)
             {
                 response.IsSuccess = false;
                 response.Message = $"Склад отправления не должен быть равен складу прибытия";
@@ -68,20 +74,20 @@ namespace StorekeeperAssistant.BL.Services.Implementation
 
             var nomenclatureIds = new List<int>();
 
-            foreach (var ii in request.CreateInventoryItemModels)
+            foreach (var inventoryItemModel in request.CreateInventoryItemModels)
             {
-                var nomenclature = await _nomenclatureRepository.GetByIdAsync(ii.Id);
+                var nomenclature = await _nomenclatureRepository.GetByIdAsync(inventoryItemModel.Id);
                 if (nomenclature == null)
                 {
                     response.IsSuccess = false;
-                    response.Message = $"Нуменклатуры с id={ii.Id} не найдено";
+                    response.Message = $"Нуменклатуры с id={inventoryItemModel.Id} не найдено";
                     return response;
                 }
 
-                if (ii.Count == 0)
+                if (inventoryItemModel.Count == 0)
                 {
                     response.IsSuccess = false;
-                    response.Message = $"Нуменклатуры с id={ii.Id} выбранно кл-во равное 0";
+                    response.Message = $"Нуменклатуры с id={inventoryItemModel.Id} выбранно кл-во равное 0";
                     return response;
                 }
 
@@ -92,22 +98,34 @@ namespace StorekeeperAssistant.BL.Services.Implementation
                     return response;
                 }
 
+                if (request.DepartureWarehouseId != null)
+                {
+                    var departureWarehouseInventoryItem = await _warehouseInventoryItemRepository.GetLastAsync(request.DepartureWarehouseId.Value, nomenclature.Id);
+                    var newCountDeparture = departureWarehouseInventoryItem.Count - inventoryItemModel.Count;
+                    if (newCountDeparture < 0)
+                    {
+                        response.IsSuccess = false;
+                        response.Message = $"Нельзя расходовать нуменклатуру id={nomenclature.Id} в кол-ве: {inventoryItemModel.Count}, недостаточно остатков на складе, остаток {departureWarehouseInventoryItem.Count}";
+                        return response;
+                    }
+                }
+
                 nomenclatureIds.Add(nomenclature.Id);
 
                 if (departureWarehouse != null)
                 {
-                    var warehouseInventoryItem = await _warehouseInventoryItemRepository.GetLastByWarehouseIdAndNomenclatureIdAsync(departureWarehouse.Id, ii.Id);
+                    var warehouseInventoryItem = await _warehouseInventoryItemRepository.GetLastAsync(departureWarehouse.Id, inventoryItemModel.Id);
                     if (warehouseInventoryItem == null)
                     {
                         response.IsSuccess = false;
-                        response.Message = $"У выбраного склада отправления с id={departureWarehouse.Id} нет ТМЦ с id={ii.Id}";
+                        response.Message = $"У выбраного склада отправления с id={departureWarehouse.Id} нет ТМЦ с id={inventoryItemModel.Id}";
                         return response;
                     }
 
-                    if (warehouseInventoryItem.Count < ii.Count)
+                    if (warehouseInventoryItem.Count < inventoryItemModel.Count)
                     {
                         response.IsSuccess = false;
-                        response.Message = $"У выбраного ТМЦ с id={ii.Id} запрашивается больше товаров, чем имеется на складе отправления с id={departureWarehouse.Id}";
+                        response.Message = $"У выбраного ТМЦ с id={inventoryItemModel.Id} запрашивается больше товаров, чем имеется на складе отправления с id={departureWarehouse.Id}";
                         return response;
                     }
                 }

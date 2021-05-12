@@ -10,6 +10,6 @@ namespace StorekeeperAssistant.DAL.Repositories
     {
         Task<WarehouseInventoryItem> GetByMovingIdAsync(int movingId, int warehouseId, int nomenclatureId);
         Task<List<WarehouseInventoryItem>> GetByPeriodAsync(int warehouseId, int nomenclatureId, DateTime startDate, DateTime endDate);
-        Task<WarehouseInventoryItem> GetLastByWarehouseIdAndNomenclatureIdAsync(int warehouseId, int nomenclatureId, DateTime? dateTime = null);
+        Task<WarehouseInventoryItem> GetLastAsync(int warehouseId, int nomenclatureId, DateTime? maxDateTime = null);
     }
 }

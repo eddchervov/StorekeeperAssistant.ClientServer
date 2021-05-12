@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace StorekeeperAssistant.BL.Services
 {
-    public interface IMovingService
+    public interface IMovingCreationService
     {
-        Task<GetMovingResponse> GetMovingsAsync(GetMovingRequest request);
-        Task<DeleteMovingResponse> DeleteMovingAsync(DeleteMovingRequest request);
+        Task<CreateMovingResponse> CreateAsync(CreateMovingRequest request);
     }
 }

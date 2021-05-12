@@ -34,17 +34,18 @@ namespace StorekeeperAssistant.DAL.Repositories.Implementation
                     && x.NomenclatureId == nomenclatureId)
                     .ToListAsync();
         }
-        public async Task<WarehouseInventoryItem> GetLastByWarehouseIdAndNomenclatureIdAsync(int warehouseId, int nomenclatureId, DateTime? dateTime = null)
+        public async Task<WarehouseInventoryItem> GetLastAsync(int warehouseId, int nomenclatureId, DateTime? maxDateTime = null)
         {
-            var wii = DbSet.OrderByDescending(x => x.DateTime)
-                .Where(x => x.WarehouseId == warehouseId && x.NomenclatureId == nomenclatureId && x.IsActive == true);
-
-            if (dateTime != null)
+            var warehouseInventoryItems = DbSet
+                .OrderByDescending(x => x.DateTime)
+                .Where(x => x.WarehouseId == warehouseId && x.NomenclatureId == nomenclatureId && x.IsActive);
+                
+            if (maxDateTime != null)
             {
-                wii = wii.Where(x => x.DateTime < dateTime);
+                warehouseInventoryItems = warehouseInventoryItems.Where(x => x.DateTime < maxDateTime);
             }
 
-            return await wii.FirstOrDefaultAsync();
+            return await warehouseInventoryItems.FirstOrDefaultAsync();
         }
     }
 }

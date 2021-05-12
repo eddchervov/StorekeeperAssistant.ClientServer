@@ -13,12 +13,15 @@ namespace StorekeeperAssistant.WebApi.Controllers
     public class MovingApiController : ControllerBase
     {
         private readonly IMovingService _movingService;
+        private readonly IMovingCreationService _movingCreationService;
         private readonly IValidationMovingService _validationMovingService;
 
         public MovingApiController(IMovingService movingService,
+            IMovingCreationService movingCreationService,
             IValidationMovingService validationMovingService)
         {
             _movingService = movingService;
+            _movingCreationService = movingCreationService;
             _validationMovingService = validationMovingService;
         }
 
@@ -38,7 +41,7 @@ namespace StorekeeperAssistant.WebApi.Controllers
             var validationResponse = await _validationMovingService.ValidationCreateMovingAsync(request);
             if (validationResponse.IsSuccess)
             {
-                response = await _movingService.CreateMovingAsync(request);
+                response = await _movingCreationService.CreateAsync(request);
             }
             else
             {

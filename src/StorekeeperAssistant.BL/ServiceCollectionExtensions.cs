@@ -11,6 +11,7 @@ namespace StorekeeperAssistant.BL
         public static void AddCustomBLServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IMovingService, MovingService>();
+            services.AddScoped<IMovingCreationService, MovingCreationService>();
             services.AddScoped<IValidationMovingService, ValidationMovingService>();
             services.AddScoped<IWarehouseService, WarehouseService>();
             services.AddScoped<IWarehouseInventoryItemService, WarehouseInventoryItemService>();
