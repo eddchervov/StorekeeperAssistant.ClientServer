@@ -1,7 +1,5 @@
 ﻿using StorekeeperAssistant.Api.Models.InventoryItem;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace StorekeeperAssistant.Api.Models.Moving
 {
@@ -19,5 +17,9 @@ namespace StorekeeperAssistant.Api.Models.Moving
         /// Список перемещаемых ТМЦ
         /// </summary>
         public List<CreateInventoryItemModel> CreateInventoryItemModels { get; set; } = new List<CreateInventoryItemModel>();
+        /// <summary>
+        /// Отметка удаления перемещения
+        /// </summary>
+        public bool IsActive { get; set; } = true;
     }
 }

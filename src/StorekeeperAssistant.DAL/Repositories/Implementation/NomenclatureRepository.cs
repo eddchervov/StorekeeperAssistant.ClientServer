@@ -3,19 +3,16 @@ using StorekeeperAssistant.DAL.DBContext;
 using StorekeeperAssistant.DAL.Entities;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace StorekeeperAssistant.DAL.Repositories.Implementation
 {
     internal class NomenclatureRepository : BaseRepository<Nomenclature>, INomenclatureRepository
     {
-        private readonly IAppDBContext _context;
-
         public NomenclatureRepository(IAppDBContext context)
             : base(context.Nomenclatures)
         {
-            _context = context;
         }
 
         public async Task<List<Nomenclature>> GetListAsync()
@@ -26,6 +23,11 @@ namespace StorekeeperAssistant.DAL.Repositories.Implementation
         public async Task<Nomenclature> GetByIdAsync(int id)
         {
             return await DbSet.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<List<Nomenclature>> GetByIdsAsync(IEnumerable<int> ids)
+        {
+            return await DbSet.Where(x => ids.Contains(x.Id)).ToListAsync();
         }
     }
 }

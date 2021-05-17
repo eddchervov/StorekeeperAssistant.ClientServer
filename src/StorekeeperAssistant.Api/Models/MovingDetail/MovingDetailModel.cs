@@ -1,7 +1,4 @@
 ﻿using StorekeeperAssistant.Api.Models.Nomenclature;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace StorekeeperAssistant.Api.Models.MovingDetail
 {

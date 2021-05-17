@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StorekeeperAssistant.DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace StorekeeperAssistant.DAL.DBContext.Implementation
 {
@@ -122,82 +119,6 @@ namespace StorekeeperAssistant.DAL.DBContext.Implementation
                     Name = "Номенклатура Ж"
                 },
             });
-
-            //builder.Entity<WarehouseInventoryItem>().HasData(
-            //new WarehouseInventoryItem[]
-            //{
-            //    new WarehouseInventoryItem
-            //    {
-            //        Id = 1,
-            //        NomenclatureId = 1,
-            //        Count = 10,
-            //        DateTime = DateTime.UtcNow.AddMinutes(-1),
-            //        IsActive = true,
-            //        WarehouseId = 1,
-            //        MovingId = 1
-            //    },
-            //    new WarehouseInventoryItem
-            //    {
-            //        Id = 2,
-            //        NomenclatureId = 5,
-            //        Count = 5,
-            //        DateTime = DateTime.UtcNow,
-            //        IsActive = true,
-            //        WarehouseId = 3,
-            //        MovingId = 1
-            //    },
-            //    new WarehouseInventoryItem
-            //    {
-            //        Id = 3,
-            //        NomenclatureId = 2,
-            //        Count = 100,
-            //        DateTime = DateTime.UtcNow,
-            //        IsActive = true,
-            //        WarehouseId = 1,
-            //        MovingId = 1
-            //    },
-            //    new WarehouseInventoryItem
-            //    {
-            //        Id = 4,
-            //        NomenclatureId = 3,
-            //        Count = 100,
-            //        DateTime = DateTime.UtcNow,
-            //        IsActive = true,
-            //        WarehouseId = 2,
-            //        MovingId = 1
-            //    },
-            //    new WarehouseInventoryItem
-            //    {
-            //        Id = 5,
-            //        NomenclatureId = 4,
-            //        Count = 70,
-            //        DateTime = DateTime.UtcNow,
-            //        IsActive = true,
-            //        WarehouseId = 3,
-            //        MovingId = 1
-            //    },
-            //    new WarehouseInventoryItem
-            //    {
-            //        Id = 6,
-            //        NomenclatureId = 4,
-            //        Count = 30,
-            //        DateTime = DateTime.UtcNow,
-            //        IsActive = true,
-            //        WarehouseId = 2,
-            //        MovingId = 1
-            //    },
-            //    new WarehouseInventoryItem
-            //    {
-            //        Id = 7,
-            //        NomenclatureId = 7,
-            //        Count = 100,
-            //        DateTime = DateTime.UtcNow,
-            //        IsActive = true,
-            //        WarehouseId = 3,
-            //        MovingId = 1
-            //    },
-
-            //});
         }
     }
 }

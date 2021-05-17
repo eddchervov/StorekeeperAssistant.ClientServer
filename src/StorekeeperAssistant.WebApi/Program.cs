@@ -1,12 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using NLog.Web;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace StorekeeperAssistant.WebApi
 {
@@ -14,7 +9,7 @@ namespace StorekeeperAssistant.WebApi
     {
         public static void Main(string[] args)
         {
-            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
             try
             {
                 logger.Debug("init main");
@@ -22,13 +17,11 @@ namespace StorekeeperAssistant.WebApi
             }
             catch (Exception ex)
             {
-                //NLog: catch setup errors
                 logger.Error(ex, "Stopped program because of exception");
                 throw;
             }
             finally
             {
-                // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
                 NLog.LogManager.Shutdown();
             }
         }
@@ -39,6 +32,6 @@ namespace StorekeeperAssistant.WebApi
                 {
                     webBuilder.UseStartup<Startup>();
                 })
-                .UseNLog();  // NLog: Setup NLog for Dependency injection);
+                .UseNLog();
     }
 }

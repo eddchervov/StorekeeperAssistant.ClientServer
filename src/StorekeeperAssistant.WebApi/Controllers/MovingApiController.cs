@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using StorekeeperAssistant.Api.Models.Moving;
 using StorekeeperAssistant.BL.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace StorekeeperAssistant.WebApi.Controllers
@@ -13,51 +9,28 @@ namespace StorekeeperAssistant.WebApi.Controllers
     public class MovingApiController : ControllerBase
     {
         private readonly IMovingService _movingService;
-        private readonly IMovingCreationService _movingCreationService;
-        private readonly IValidationMovingService _validationMovingService;
 
-        public MovingApiController(IMovingService movingService,
-            IMovingCreationService movingCreationService,
-            IValidationMovingService validationMovingService)
+        public MovingApiController(IMovingService movingService)
         {
             _movingService = movingService;
-            _movingCreationService = movingCreationService;
-            _validationMovingService = validationMovingService;
         }
 
         [HttpGet("get")]
         public async Task<GetMovingResponse> GetMovingsAsync(GetMovingRequest request)
         {
-            var response = await _movingService.GetMovingsAsync(request);
-
-            return response;
+            return await _movingService.GetMovingsAsync(request);
         }
 
         [HttpPost("create")]
         public async Task<CreateMovingResponse> CreateMovingAsync([FromBody] CreateMovingRequest request)
         {
-            var response = new CreateMovingResponse { IsSuccess = true, Message = string.Empty };
-
-            var validationResponse = await _validationMovingService.ValidationCreateMovingAsync(request);
-            if (validationResponse.IsSuccess)
-            {
-                response = await _movingCreationService.CreateAsync(request);
-            }
-            else
-            {
-                response.IsSuccess = false;
-                response.Message = validationResponse.Message;
-            }
-
-            return response;
+            return await _movingService.CreateMovingAsync(request);
         }
 
         [HttpPut("delete")]
         public async Task<DeleteMovingResponse> DeleteMovingAsync([FromBody] DeleteMovingRequest request)
         {
-            var response = await _movingService.DeleteMovingAsync(request);
-
-            return response;
+            return await _movingService.DeleteMovingAsync(request);
         }
     }
 }

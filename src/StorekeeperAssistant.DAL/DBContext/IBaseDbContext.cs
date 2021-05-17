@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace StorekeeperAssistant.DAL.DBContext
 {

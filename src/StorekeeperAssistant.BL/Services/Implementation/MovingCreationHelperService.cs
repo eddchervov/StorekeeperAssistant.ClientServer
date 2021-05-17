@@ -1,19 +1,17 @@
-﻿using StorekeeperAssistant.Api.Models.InventoryItem;
-using StorekeeperAssistant.Api.Models.Nomenclature;
-using StorekeeperAssistant.DAL.Entities;
+﻿using StorekeeperAssistant.DAL.Entities;
 using System;
 
 namespace StorekeeperAssistant.BL.Services.Implementation
 {
     public static class MovingCreationHelperService
     {
-        public static Moving CreateMoving(int? departureWarehouseId, int? arrivalWarehouseId, DateTime utcNow)
+        public static Moving CreateMoving(int? departureWarehouseId, int? arrivalWarehouseId, DateTime utcNow, bool isActive)
         {
             var moving = new Moving
             {
                 DepartureWarehouseId = departureWarehouseId,
                 ArrivalWarehouseId = arrivalWarehouseId,
-                IsActive = true,
+                IsActive = isActive,
                 DateTime = utcNow
             };
 

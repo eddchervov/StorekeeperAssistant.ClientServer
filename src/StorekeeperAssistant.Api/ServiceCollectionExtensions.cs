@@ -4,7 +4,6 @@ using StorekeeperAssistant.Api.Services;
 using StorekeeperAssistant.Api.Services.Implementation;
 using StorekeeperAssistant.Api.Utils;
 using StorekeeperAssistant.Api.Utils.Implementation;
-using System;
 
 namespace StorekeeperAssistant.Api
 {

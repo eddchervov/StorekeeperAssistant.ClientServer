@@ -33,7 +33,7 @@ namespace StorekeeperAssistant.BL.Services.Implementation
             {
                 using var transaction = _appDBContext.BeginTransaction();
 
-                var moving = MovingCreationHelperService.CreateMoving(request.DepartureWarehouseId, request.ArrivalWarehouseId, utcNow);
+                var moving = MovingCreationHelperService.CreateMoving(request.DepartureWarehouseId, request.ArrivalWarehouseId, utcNow, request.IsActive);
                 await _movingRepository.InsertAsync(moving);
 
                 foreach (var nomenclature in request.CreateInventoryItemModels)
@@ -56,7 +56,7 @@ namespace StorekeeperAssistant.BL.Services.Implementation
                         var arrivalWarehouseInventoryItem = await _warehouseInventoryItemRepository.GetLastAsync(request.ArrivalWarehouseId.Value, nomenclature.Id);
                         if (arrivalWarehouseInventoryItem != null) newCountArrival += arrivalWarehouseInventoryItem.Count;
 
-                        var warehouseInventoryItem = MovingCreationHelperService.CreateWarehouseInventoryItem(nomenclature.Id, utcNow, newCountArrival, request.DepartureWarehouseId.Value, moving.Id);
+                        var warehouseInventoryItem = MovingCreationHelperService.CreateWarehouseInventoryItem(nomenclature.Id, utcNow, newCountArrival, request.ArrivalWarehouseId.Value, moving.Id);
                         await _warehouseInventoryItemRepository.InsertAsync(warehouseInventoryItem);
                     }
                 }

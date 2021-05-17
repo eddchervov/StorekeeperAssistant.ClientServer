@@ -6,8 +6,6 @@ using StorekeeperAssistant.DAL.DBContext.Implementation;
 using StorekeeperAssistant.DAL.Repositories;
 using StorekeeperAssistant.DAL.Repositories.Implementation;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace StorekeeperAssistant.DAL
 {
@@ -31,9 +29,6 @@ namespace StorekeeperAssistant.DAL
             services.AddScoped<IWarehouseInventoryItemRepository, WarehouseInventoryItemRepository>();
             services.AddScoped<INomenclatureRepository, NomenclatureRepository>();
             services.AddScoped<IMovingDetailRepository, MovingDetailRepository>();
-            
-
-
         }
     }
 }

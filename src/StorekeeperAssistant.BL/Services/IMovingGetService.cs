@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace StorekeeperAssistant.BL.Services
 {
-    public interface IMovingCreationService
+    public interface IMovingGetService
     {
-        Task<CreateMovingResponse> CreateAsync(CreateMovingRequest request);
+        Task<GetMovingResponse> GetMovingsAsync(GetMovingRequest request);
     }
 }
