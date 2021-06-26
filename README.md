@@ -15,7 +15,7 @@
 
 Стек технологий:
 - backend: ASP.NET Core 3.1
-- Web Api + SPA
+- Web Api + MVC
 - db: mssql
 - orm: Entity Framework Core 3.0
 - frontend: Vue.js
