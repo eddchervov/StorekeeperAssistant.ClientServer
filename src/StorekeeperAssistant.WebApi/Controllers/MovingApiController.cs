@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StorekeeperAssistant.Api.Models.Moving;
-using StorekeeperAssistant.BL.Services;
+using StorekeeperAssistant.Api.Models.Movings;
+using StorekeeperAssistant.BL.Services.Movings;
 using System.Threading.Tasks;
 
 namespace StorekeeperAssistant.WebApi.Controllers
@@ -16,21 +16,15 @@ namespace StorekeeperAssistant.WebApi.Controllers
         }
 
         [HttpGet("get")]
-        public async Task<GetMovingResponse> GetMovingsAsync(GetMovingRequest request)
-        {
-            return await _movingService.GetMovingsAsync(request);
-        }
+        public async Task<GetMovingResponse> GetAsync(GetMovingRequest request) 
+            => await _movingService.GetAsync(request);
 
         [HttpPost("create")]
-        public async Task<CreateMovingResponse> CreateMovingAsync([FromBody] CreateMovingRequest request)
-        {
-            return await _movingService.CreateMovingAsync(request);
-        }
+        public async Task<CreateMovingResponse> CreateAsync([FromBody] CreateMovingRequest request) 
+            => await _movingService.CreateAsync(request);
 
         [HttpPut("delete")]
-        public async Task<DeleteMovingResponse> DeleteMovingAsync([FromBody] DeleteMovingRequest request)
-        {
-            return await _movingService.DeleteMovingAsync(request);
-        }
+        public async Task<DeleteMovingResponse> DeleteAsync([FromBody] DeleteMovingRequest request) 
+            => await _movingService.DeleteAsync(request);
     }
 }

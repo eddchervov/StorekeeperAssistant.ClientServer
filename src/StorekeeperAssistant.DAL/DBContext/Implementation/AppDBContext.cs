@@ -12,7 +12,7 @@ namespace StorekeeperAssistant.DAL.DBContext.Implementation
         }
 
         public DbSet<Warehouse> Warehouses { get; set; }
-        public DbSet<Nomenclature> Nomenclatures { get; set; }
+        public DbSet<InventoryItem> InventoryItems { get; set; }
         public DbSet<Moving> Movings { get; set; }
         public DbSet<MovingDetail> MovingDetails { get; set; }
         public DbSet<WarehouseInventoryItem> WarehouseInventoryItems { get; set; }
@@ -28,7 +28,7 @@ namespace StorekeeperAssistant.DAL.DBContext.Implementation
                 entity.Property(e => e.Name).IsRequired();
             });
 
-            builder.Entity<Nomenclature>(entity =>
+            builder.Entity<InventoryItem>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.Name).IsUnique();
@@ -74,40 +74,40 @@ namespace StorekeeperAssistant.DAL.DBContext.Implementation
                 }
             });
 
-            builder.Entity<Nomenclature>().HasData(
-            new Nomenclature[]
+            builder.Entity<InventoryItem>().HasData(
+            new InventoryItem[]
             {
-                new Nomenclature
+                new InventoryItem
                 {
                     Id = 1,
                     Name = "Номенклатура А"
                 },
-                new Nomenclature
+                new InventoryItem
                 {
                     Id = 2,
                     Name = "Номенклатура Б"
                 },
-                new Nomenclature
+                new InventoryItem
                 {
                     Id = 3,
                     Name = "Номенклатура В"
                 },
-                new Nomenclature
+                new InventoryItem
                 {
                     Id = 4,
                     Name = "Номенклатура Г"
                 },
-                new Nomenclature
+                new InventoryItem
                 {
                     Id = 5,
                     Name = "Номенклатура Д"
                 },
-                new Nomenclature
+                new InventoryItem
                 {
                     Id = 6,
                     Name = "Номенклатура Е"
                 },
-                new Nomenclature
+                new InventoryItem
                 {
                     Id = 7,
                     Name = "Номенклатура Ж"

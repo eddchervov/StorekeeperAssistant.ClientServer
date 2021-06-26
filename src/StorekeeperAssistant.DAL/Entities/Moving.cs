@@ -3,7 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StorekeeperAssistant.DAL.Entities
 {
-    [Table("Moving")]
+    /// <summary>
+    /// Перемещения
+    /// </summary>
     public class Moving
     {
         public int Id { get; set; }
@@ -25,6 +27,6 @@ namespace StorekeeperAssistant.DAL.Entities
         [ForeignKey("ArrivalWarehouseId")]
         public Warehouse ArrivalWarehouse { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

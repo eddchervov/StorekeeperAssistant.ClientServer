@@ -1,10 +1,10 @@
-﻿using StorekeeperAssistant.Api.Models.InventoryItem;
+﻿using StorekeeperAssistant.Api.Models.WarehouseInventoryItems;
 using System.Threading.Tasks;
 
 namespace StorekeeperAssistant.Api.Services
 {
     public interface IWarehouseInventoryItemRemoteCallService
     {
-        Task<GetWarehouseInventoryItemByWarehouseIdResponse> GetWarehouseInventoryItemByWarehouseIdAsync(GetWarehouseInventoryItemByWarehouseIdRequest request);
+        Task<GetWarehouseInventoryItemResponse> GetAsync(GetWarehouseInventoryItemRequest request);
     }
 }

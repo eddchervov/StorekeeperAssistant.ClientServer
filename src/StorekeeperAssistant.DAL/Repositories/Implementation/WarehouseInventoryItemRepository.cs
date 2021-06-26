@@ -15,26 +15,11 @@ namespace StorekeeperAssistant.DAL.Repositories.Implementation
         {
         }
 
-        public async Task<WarehouseInventoryItem> GetByMovingIdAsync(int movingId, int warehouseId, int nomenclatureId)
-        {
-            return await DbSet.FirstOrDefaultAsync(x => x.MovingId == movingId && x.WarehouseId == warehouseId && x.NomenclatureId == nomenclatureId);
-        }
-
-        public async Task<List<WarehouseInventoryItem>> GetByPeriodAsync(int warehouseId, int nomenclatureId, DateTime startDate, DateTime endDate)
-        {
-            return await DbSet
-                .Where(x => x.DateTime > startDate
-                    && x.DateTime < endDate
-                    && x.IsActive == true
-                    && x.WarehouseId == warehouseId
-                    && x.NomenclatureId == nomenclatureId)
-                    .ToListAsync();
-        }
-        public async Task<WarehouseInventoryItem> GetLastAsync(int warehouseId, int nomenclatureId, DateTime? maxDateTime = null)
+        public async Task<WarehouseInventoryItem> GetLastAsync(int warehouseId, int inventoryItemId, DateTime? maxDateTime = null)
         {
             var warehouseInventoryItems = DbSet
                 .OrderByDescending(x => x.DateTime)
-                .Where(x => x.WarehouseId == warehouseId && x.NomenclatureId == nomenclatureId && x.IsActive);
+                .Where(x => x.WarehouseId == warehouseId && x.InventoryItemId == inventoryItemId && x.IsDeleted == false);
                 
             if (maxDateTime != null)
             {
@@ -42,6 +27,20 @@ namespace StorekeeperAssistant.DAL.Repositories.Implementation
             }
 
             return await warehouseInventoryItems.FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<WarehouseInventoryItem>> GetLastAsync(IEnumerable<int> warehouseIds, IEnumerable<int> inventoryItemIds, DateTime? maxDateTime = null)
+        {
+            var warehouseInventoryItems = DbSet
+                .OrderByDescending(x => x.DateTime)
+                .Where(x => warehouseIds.Contains(x.WarehouseId) && inventoryItemIds.Contains(x.InventoryItemId) && x.IsDeleted == false);
+
+            if (maxDateTime != null)
+            {
+                warehouseInventoryItems = warehouseInventoryItems.Where(x => x.DateTime < maxDateTime);
+            }
+
+            return await warehouseInventoryItems.ToListAsync();
         }
     }
 }

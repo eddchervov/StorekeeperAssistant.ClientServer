@@ -5,28 +5,27 @@ namespace StorekeeperAssistant.DAL.Entities
     /// <summary>
     /// Подробности перемещения
     /// </summary>
-    [Table("MovingDetail")]
     public class MovingDetail
     {
         public int Id { get; set; }
         /// <summary>
-        /// Кол-во
+        /// Количество
         /// </summary>
         public int Count { get; set; }
 
         /// <summary>
-        /// Передвиженеие
+        /// Перемещение
         /// </summary>
         public int MovingId { get; set; }
         [ForeignKey("MovingId")]
         public Moving Moving { get; set; }
         /// <summary>
-        /// Нуменклатура которая перенесена
+        /// Нуменклатура
         /// </summary>
-        public int NomenclatureId { get; set; }
-        [ForeignKey("NomenclatureId")]
-        public Nomenclature Nomenclature { get; set; }
+        public int InventoryItemId { get; set; }
+        [ForeignKey("InventoryItemId")]
+        public InventoryItem InventoryItem { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

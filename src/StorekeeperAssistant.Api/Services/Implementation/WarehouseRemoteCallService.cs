@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using StorekeeperAssistant.Api.Models.Warehouse;
+using StorekeeperAssistant.Api.Models.Warehouses;
 using StorekeeperAssistant.Api.Utils;
 using System.Threading.Tasks;
 
@@ -14,14 +14,14 @@ namespace StorekeeperAssistant.Api.Services.Implementation
 
         protected override string _apiSchemeAndHostConfigKey { get; set; } = "StorekeeperAssistant.Api.SchemeAndHost";
 
-        public async Task<GetWarehouseResponse> GetWarehousesWithoutCacheAsync(GetWarehouseRequest request)
-            => await ExecuteGetAsync<GetWarehouseResponse, GetWarehouseRequest>("api/warehouse/get", request);
+        public async Task<GetWarehouseResponse> GetWithoutCacheAsync(GetWarehouseRequest request)
+            => await ExecuteGetAsync<GetWarehouseResponse, GetWarehouseRequest>("api/warehouses/get", request);
 
-        public async Task<GetWarehouseResponse> GetWarehousesAsync(GetWarehouseRequest request)
+        public async Task<GetWarehouseResponse> GetAsync(GetWarehouseRequest request)
         {
             var cacheKey = $"{nameof(WarehouseRemoteCallService)}.{nameof(GetWarehouseRequest)}({JsonConvert.SerializeObject(request)})";
 
-            return await _cacheProvider.Get(cacheKey, _defaultCacheTime, () => GetWarehousesWithoutCacheAsync(request));
+            return await _cacheProvider.Get(cacheKey, _defaultCacheTime, () => GetWithoutCacheAsync(request));
         }
     }
 }

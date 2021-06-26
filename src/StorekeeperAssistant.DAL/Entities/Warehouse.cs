@@ -5,12 +5,14 @@ namespace StorekeeperAssistant.DAL.Entities
     /// <summary>
     /// Склады компании
     /// </summary>
-    [Table("Warehouse")]
     public class Warehouse
     {
         public int Id { get; set; }
+        /// <summary>
+        /// Название
+        /// </summary>
         public string Name { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

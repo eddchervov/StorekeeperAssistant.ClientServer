@@ -15,7 +15,7 @@ namespace StorekeeperAssistant.Api
             services.AddScoped<IMovingRemoteCallService, MovingRemoteCallService>();
             services.AddScoped<IWarehouseRemoteCallService, WarehouseRemoteCallService>();
             services.AddScoped<IWarehouseInventoryItemRemoteCallService, WarehouseInventoryItemRemoteCallService>();
-            services.AddScoped<INomenclatureRemoteCallService, NomenclatureRemoteCallService>();
+            services.AddScoped<IInventoryItemRemoteCallService, InventoryItemRemoteCallService>();
         }
     }
 }

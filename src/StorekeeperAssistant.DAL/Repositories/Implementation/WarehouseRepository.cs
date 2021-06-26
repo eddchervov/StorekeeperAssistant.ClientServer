@@ -20,12 +20,12 @@ namespace StorekeeperAssistant.DAL.Repositories.Implementation
             return await DbSet.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<List<Warehouse>> GetByIdsAsync(IEnumerable<int> ids)
+        public async Task<IEnumerable<Warehouse>> GetByIdsAsync(IEnumerable<int> ids)
         {
             return await DbSet.Where(x => ids.Contains(x.Id)).ToListAsync();
         }
 
-        public async Task<List<Warehouse>> GetListAsync()
+        public async Task<IEnumerable<Warehouse>> GetAsync()
         {
             return await DbSet.ToListAsync();
         }

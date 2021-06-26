@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using StorekeeperAssistant.Api.Models.Moving;
+using StorekeeperAssistant.Api.Models.Movings;
 using StorekeeperAssistant.Api.Utils;
 using System.Threading.Tasks;
 
@@ -13,13 +13,13 @@ namespace StorekeeperAssistant.Api.Services.Implementation
 
         protected override string _apiSchemeAndHostConfigKey { get; set; } = "StorekeeperAssistant.Api.SchemeAndHost";
 
-        public async Task<GetMovingResponse> GetMovingsAsync(GetMovingRequest request)
+        public async Task<GetMovingResponse> GetAsync(GetMovingRequest request)
             => await ExecuteGetAsync<GetMovingResponse, GetMovingRequest>("api/movings/get", request);
 
-        public async Task<CreateMovingResponse> CreateMovingAsync(CreateMovingRequest request)
+        public async Task<CreateMovingResponse> CreateAsync(CreateMovingRequest request)
             => await ExecutePostAsync<CreateMovingResponse, CreateMovingRequest>("api/movings/create", request);
 
-        public async Task<DeleteMovingResponse> DeleteMovingAsync(DeleteMovingRequest request)
+        public async Task<DeleteMovingResponse> DeleteAsync(DeleteMovingRequest request)
             => await ExecutePutAsync<DeleteMovingResponse, DeleteMovingRequest>("api/movings/delete", request);
     }
 }

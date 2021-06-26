@@ -7,19 +7,33 @@ namespace StorekeeperAssistant.DAL.Entities
     public class WarehouseInventoryItem
     {
         public int Id { get; set; }
+        /// <summary>
+        /// Количество
+        /// </summary>
         public int Count { get; set; }
+        /// <summary>
+        /// Дата
+        /// </summary>
         public DateTime DateTime { get; set; }
-
+        /// <summary>
+        /// Склад
+        /// </summary>
         public int WarehouseId { get; set; }
         [ForeignKey("WarehouseId")]
         public Warehouse Warehouse { get; set; }
-        public int NomenclatureId { get; set; }
-        [ForeignKey("NomenclatureId")]
-        public Nomenclature Nomenclature { get; set; }
+        /// <summary>
+        /// Номенклатура
+        /// </summary>
+        public int InventoryItemId { get; set; }
+        [ForeignKey("InventoryItemId")]
+        public InventoryItem InventoryItem { get; set; }
+        /// <summary>
+        /// Перемещение
+        /// </summary>
         public int MovingId { get; set; }
         [ForeignKey("MovingId")]
         public Moving Moving { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

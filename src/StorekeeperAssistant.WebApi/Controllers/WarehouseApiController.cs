@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StorekeeperAssistant.Api.Models.Warehouse;
-using StorekeeperAssistant.BL.Services;
+using StorekeeperAssistant.Api.Models.Warehouses;
+using StorekeeperAssistant.BL.Services.Warehouses;
 using System.Threading.Tasks;
 
 namespace StorekeeperAssistant.WebApi.Controllers
 {
-    [Route("api/warehouse")]
+    [Route("api/warehouses")]
     public class WarehouseApiController : ControllerBase
     {
         private readonly IWarehouseService _warehouseService;
@@ -16,11 +16,7 @@ namespace StorekeeperAssistant.WebApi.Controllers
         }
 
         [HttpGet("get")]
-        public async Task<GetWarehouseResponse> GetWarehousesAsync(GetWarehouseRequest request)
-        {
-            var response = await _warehouseService.GetWarehousesAsync(request);
-
-            return response;
-        }
+        public async Task<GetWarehouseResponse> GetAsync(GetWarehouseRequest request)
+            => await _warehouseService.GetAsync(request);
     }
 }

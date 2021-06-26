@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using StorekeeperAssistant.Api.Models.InventoryItem;
+using StorekeeperAssistant.Api.Models.WarehouseInventoryItems;
 using StorekeeperAssistant.Api.Utils;
 using System.Threading.Tasks;
 
@@ -13,7 +13,7 @@ namespace StorekeeperAssistant.Api.Services.Implementation
 
         protected override string _apiSchemeAndHostConfigKey { get; set; } = "StorekeeperAssistant.Api.SchemeAndHost";
 
-        public async Task<GetWarehouseInventoryItemByWarehouseIdResponse> GetWarehouseInventoryItemByWarehouseIdAsync(GetWarehouseInventoryItemByWarehouseIdRequest request)
-            => await ExecuteGetAsync<GetWarehouseInventoryItemByWarehouseIdResponse, GetWarehouseInventoryItemByWarehouseIdRequest>("api/warehouse-inventory-item/get-by-warehouse-id", request);
+        public async Task<GetWarehouseInventoryItemResponse> GetAsync(GetWarehouseInventoryItemRequest request)
+            => await ExecuteGetAsync<GetWarehouseInventoryItemResponse, GetWarehouseInventoryItemRequest>("api/warehouse-inventory-items/get", request);
     }
 }

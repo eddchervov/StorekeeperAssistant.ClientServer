@@ -7,7 +7,7 @@ namespace StorekeeperAssistant.DAL.Repositories
     public interface IWarehouseRepository
     {
         Task<Warehouse> GetByIdAsync(int id);
-        Task<List<Warehouse>> GetByIdsAsync(IEnumerable<int> ids);
-        Task<List<Warehouse>> GetListAsync();
+        Task<IEnumerable<Warehouse>> GetByIdsAsync(IEnumerable<int> ids);
+        Task<IEnumerable<Warehouse>> GetAsync();
     }
 }

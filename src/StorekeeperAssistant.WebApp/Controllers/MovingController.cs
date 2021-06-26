@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StorekeeperAssistant.Api.Models.Moving;
+using StorekeeperAssistant.Api.Models.Movings;
 using StorekeeperAssistant.Api.Services;
 using System.Threading.Tasks;
 
@@ -38,7 +38,7 @@ namespace StorekeeperAssistant.WebApp.Controllers
         [HttpGet("movings/get")]
         public async Task<IActionResult> GetMovingsAsync(GetMovingRequest request)
         {
-            var response = await _movingRemoteCallService.GetMovingsAsync(request);
+            var response = await _movingRemoteCallService.GetAsync(request);
             return Json(response);
         }
 
@@ -48,7 +48,7 @@ namespace StorekeeperAssistant.WebApp.Controllers
         [HttpPost("movings/create")]
         public async Task<IActionResult> CreateMovingAsync([FromBody]CreateMovingRequest request)
         {
-            var response = await _movingRemoteCallService.CreateMovingAsync(request);
+            var response = await _movingRemoteCallService.CreateAsync(request);
             return Json(response);
         }
 
@@ -58,7 +58,7 @@ namespace StorekeeperAssistant.WebApp.Controllers
         [HttpPost("movings/delete")]
         public async Task<IActionResult> DeleteMovingAsync([FromBody] DeleteMovingRequest request)
         {
-            var response = await _movingRemoteCallService.DeleteMovingAsync(request);
+            var response = await _movingRemoteCallService.DeleteAsync(request);
             return Json(response);
         }
     }

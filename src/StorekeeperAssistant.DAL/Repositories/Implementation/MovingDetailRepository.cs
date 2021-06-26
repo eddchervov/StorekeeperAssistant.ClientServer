@@ -14,12 +14,12 @@ namespace StorekeeperAssistant.DAL.Repositories.Implementation
         {
         }
 
-        public async Task<List<MovingDetail>> GetByMovingIdAsync(int movingId)
+        public async Task<IEnumerable<MovingDetail>> GetByMovingIdAsync(int movingId)
         {
-            return await DbSet.Where(x=>x.MovingId == movingId).ToListAsync();
+            return await DbSet.Where(x => x.MovingId == movingId).ToListAsync();
         }
 
-        public async Task<List<MovingDetail>> GetByMovingIdsAsync(IEnumerable<int> movingIds)
+        public async Task<IEnumerable<MovingDetail>> GetByMovingIdsAsync(IEnumerable<int> movingIds)
         {
             return await DbSet.Where(x => movingIds.Contains(x.MovingId)).ToListAsync();
         }

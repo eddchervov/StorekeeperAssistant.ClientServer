@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StorekeeperAssistant.Api.Models.Warehouse;
+using StorekeeperAssistant.Api.Models.Warehouses;
 using StorekeeperAssistant.Api.Services;
 using System.Threading.Tasks;
 
@@ -17,7 +17,7 @@ namespace StorekeeperAssistant.WebApp.Controllers
         [HttpGet("warehouses/get")]
         public async Task<IActionResult> GetWarehousesAsync(GetWarehouseRequest request)
         {
-            var response = await _warehouseRemoteCallService.GetWarehousesAsync(request);
+            var response = await _warehouseRemoteCallService.GetAsync(request);
 
             return Json(response);
         }

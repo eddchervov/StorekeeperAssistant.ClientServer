@@ -16,19 +16,22 @@ namespace StorekeeperAssistant.DAL.Repositories.Implementation
 
         public async Task<Moving> GetByIdAsync(int id)
         {
-            return await DbSet.FirstOrDefaultAsync(x=>x.Id == id);
+            return await DbSet.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<MovingsDTOResponse> GetAsync(int skip, int take)
+        public async Task<GetMovingsResponse> GetFullAsync(int skip, int take)
         {
-            var q = DbSet.Where(m => m.IsActive);
+            var q = DbSet
+                .Include(x => x.ArrivalWarehouse)
+                .Include(x => x.DepartureWarehouse)
+                .Where(m => m.IsDeleted == false);
             q = q.OrderByDescending(x => x.DateTime);
 
             var totalCount = await q.CountAsync();
 
             q = q.Skip(skip).Take(take);
 
-            return new MovingsDTOResponse { TotalCount = totalCount, Movings = await q.ToListAsync() };
+            return new GetMovingsResponse { TotalCount = totalCount, Movings = await q.ToListAsync() };
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StorekeeperAssistant.Api.Models.InventoryItem;
+using StorekeeperAssistant.Api.Models.WarehouseInventoryItems;
 using StorekeeperAssistant.Api.Services;
 using System.Threading.Tasks;
 
@@ -21,9 +21,9 @@ namespace StorekeeperAssistant.WebApp.Controllers
         } 
 
         [HttpGet("warehouse-inventory-item/get-by-warehouse-id/{WarehouseId:int}")]
-        public async Task<IActionResult> GetWarehouseInventoryItemByWarehouseIdAsync(GetWarehouseInventoryItemByWarehouseIdRequest request)
+        public async Task<IActionResult> GetWarehouseInventoryItemByWarehouseIdAsync(GetWarehouseInventoryItemRequest request)
         {
-            var response = await _warehouseInventoryItemRemoteCallService.GetWarehouseInventoryItemByWarehouseIdAsync(request);
+            var response = await _warehouseInventoryItemRemoteCallService.GetAsync(request);
 
             return Json(response);
         }

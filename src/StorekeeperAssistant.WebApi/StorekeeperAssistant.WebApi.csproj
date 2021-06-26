@@ -24,6 +24,7 @@
     <ProjectReference Include="..\StorekeeperAssistant.BL\StorekeeperAssistant.BL.csproj" />
     <ProjectReference Include="..\StorekeeperAssistant.DAL\StorekeeperAssistant.DAL.csproj" />
     <ProjectReference Include="..\StorekeeperAssistant.loCConfig\StorekeeperAssistant.loCConfig.csproj" />
+    <ProjectReference Include="..\StorekeeperAssistant.WebApp\StorekeeperAssistant.WebApp.csproj" />
   </ItemGroup>
 
 

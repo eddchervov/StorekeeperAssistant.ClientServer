@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StorekeeperAssistant.Api.Models.InventoryItem;
-using StorekeeperAssistant.BL.Services;
+using StorekeeperAssistant.Api.Models.WarehouseInventoryItems;
+using StorekeeperAssistant.BL.Services.WarehouseInventoryItems;
 using System.Threading.Tasks;
 
 namespace StorekeeperAssistant.WebApi.Controllers
 {
-    [Route("api/warehouse-inventory-item")]
+    [Route("api/warehouse-inventory-items")]
     public class WarehouseInventoryItemApiController : ControllerBase
     {
         private readonly IWarehouseInventoryItemService _warehouseInventoryItemService;
@@ -18,21 +18,19 @@ namespace StorekeeperAssistant.WebApi.Controllers
             _validationWarehouseInventoryItemService = validationWarehouseInventoryItemService;
         }
 
-        [HttpGet("get-by-warehouse-id")]
-        public async Task<GetWarehouseInventoryItemByWarehouseIdResponse> GetWarehouseInventoryItemByWarehouseIdAsync(GetWarehouseInventoryItemByWarehouseIdRequest request)
+        [HttpGet("get")]
+        public async Task<GetWarehouseInventoryItemResponse> GetAsync(GetWarehouseInventoryItemRequest request)
         {
-            var response = new GetWarehouseInventoryItemByWarehouseIdResponse { IsSuccess = true, Message = string.Empty };
+            var response = new GetWarehouseInventoryItemResponse { IsSuccess = true, Message = string.Empty };
 
-            var validationResponse = await _validationWarehouseInventoryItemService.ValidationWarehouseInventoryItemByWarehouseIdAsync(request);
+            var validationResponse = await _validationWarehouseInventoryItemService.ValidationAsync(request);
             if (validationResponse.IsSuccess)
             {
-                response = await _warehouseInventoryItemService.GetWarehouseInventoryItemByWarehouseIdAsync(request);
+                return await _warehouseInventoryItemService.GetAsync(request);
             }
-            else
-            {
-                response.IsSuccess = false;
-                response.Message = validationResponse.Message;
-            }
+
+            response.IsSuccess = false;
+            response.Message = validationResponse.Message;
 
             return response;
         }

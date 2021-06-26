@@ -1,12 +1,12 @@
-﻿using StorekeeperAssistant.Api.Models.Moving;
+﻿using StorekeeperAssistant.Api.Models.Movings;
 using System.Threading.Tasks;
 
 namespace StorekeeperAssistant.Api.Services
 {
     public interface IMovingRemoteCallService
     {
-        Task<GetMovingResponse> GetMovingsAsync(GetMovingRequest request);
-        Task<CreateMovingResponse> CreateMovingAsync(CreateMovingRequest request);
-        Task<DeleteMovingResponse> DeleteMovingAsync(DeleteMovingRequest request);
+        Task<GetMovingResponse> GetAsync(GetMovingRequest request);
+        Task<CreateMovingResponse> CreateAsync(CreateMovingRequest request);
+        Task<DeleteMovingResponse> DeleteAsync(DeleteMovingRequest request);
     }
 }
