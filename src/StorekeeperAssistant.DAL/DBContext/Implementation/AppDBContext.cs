@@ -8,7 +8,7 @@ namespace StorekeeperAssistant.DAL.DBContext.Implementation
         public AppDBContext(DbContextOptions options) : base(options)
         {
             //Database.EnsureDeleted();
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
         public DbSet<Warehouse> Warehouses { get; set; }
@@ -38,22 +38,16 @@ namespace StorekeeperAssistant.DAL.DBContext.Implementation
             builder.Entity<Moving>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.HasOne<Warehouse>().WithMany().HasForeignKey(p => p.ArrivalWarehouseId).OnDelete(DeleteBehavior.Restrict);
-                entity.HasOne<Warehouse>().WithMany().HasForeignKey(p => p.DepartureWarehouseId).OnDelete(DeleteBehavior.Restrict);
             });
 
             builder.Entity<MovingDetail>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.HasOne<Moving>().WithMany().HasForeignKey(p => p.MovingId).OnDelete(DeleteBehavior.Restrict);
-                entity.HasOne<Nomenclature>().WithMany().HasForeignKey(p => p.NomenclatureId).OnDelete(DeleteBehavior.Restrict);
             });
 
             builder.Entity<WarehouseInventoryItem>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.HasOne<Nomenclature>().WithMany().HasForeignKey(p => p.NomenclatureId);
-                entity.HasOne<Warehouse>().WithMany().HasForeignKey(p => p.WarehouseId);
             });
             
         }

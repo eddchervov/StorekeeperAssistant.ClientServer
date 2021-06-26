@@ -5,6 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\js\app\src\moving\create\NewFolder1\**" />
+    <Compile Remove="wwwroot\js\app\src\moving\create\NewFolder\**" />
+    <Content Remove="wwwroot\js\app\src\moving\create\NewFolder1\**" />
+    <Content Remove="wwwroot\js\app\src\moving\create\NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\js\app\src\moving\create\NewFolder1\**" />
+    <EmbeddedResource Remove="wwwroot\js\app\src\moving\create\NewFolder\**" />
+    <None Remove="wwwroot\js\app\src\moving\create\NewFolder1\**" />
+    <None Remove="wwwroot\js\app\src\moving\create\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.11" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.10.0" />
   </ItemGroup>
@@ -15,6 +26,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\fonts\" />
+    <Folder Include="wwwroot\js\app\build\" />
   </ItemGroup>
 
 </Project>

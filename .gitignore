@@ -338,3 +338,4 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/src/StorekeeperAssistant.WebApp/wwwroot/js/app/build

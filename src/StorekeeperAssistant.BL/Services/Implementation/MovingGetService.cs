@@ -35,7 +35,7 @@ namespace StorekeeperAssistant.BL.Services.Implementation
         {
             var response = new GetMovingResponse { IsSuccess = true, Message = string.Empty };
 
-            var responseDAL = await _movingRepository.GetIsActiveMovingsAsync(request.SkipCount, request.TakeCount);
+            var responseDAL = await _movingRepository.GetAsync(request.SkipCount, request.TakeCount);
 
             await InitializationListsAsync(responseDAL.Movings);
 

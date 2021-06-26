@@ -9,14 +9,24 @@ namespace StorekeeperAssistant.DAL.Entities
     public class MovingDetail
     {
         public int Id { get; set; }
-        public int MovingId { get; set; }
-        /// <summary>
-        /// Нуменклатура которая перенесена
-        /// </summary>
-        public int NomenclatureId { get; set; }
         /// <summary>
         /// Кол-во
         /// </summary>
         public int Count { get; set; }
+
+        /// <summary>
+        /// Передвиженеие
+        /// </summary>
+        public int MovingId { get; set; }
+        [ForeignKey("MovingId")]
+        public Moving Moving { get; set; }
+        /// <summary>
+        /// Нуменклатура которая перенесена
+        /// </summary>
+        public int NomenclatureId { get; set; }
+        [ForeignKey("NomenclatureId")]
+        public Nomenclature Nomenclature { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }
