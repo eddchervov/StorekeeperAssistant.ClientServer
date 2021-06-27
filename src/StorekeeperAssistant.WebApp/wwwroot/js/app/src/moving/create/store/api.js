@@ -12,7 +12,7 @@
     /**
     * Получить предметы инвентаризации склада по идентификатору склада
     */
-    GetWarehouseInventoryItemByWarehouseId: "/warehouse-inventory-item/get-by-warehouse-id",
+    GetWarehouseInventoryItems: "/warehouse-inventory-items/get",
 
     /**
     * Создать перемещение

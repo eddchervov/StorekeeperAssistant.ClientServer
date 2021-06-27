@@ -21,6 +21,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorekeeperAssistant.loCCon
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorekeeperAssistant.WebApp", "src\StorekeeperAssistant.WebApp\StorekeeperAssistant.WebApp.csproj", "{BA8DE30D-A859-49F0-9601-757C6B30E1CC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{33267518-14D9-4EEB-8568-214AFDD522AA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorekeeperAssistant.BL.Tests", "src\Tests\StorekeeperAssistant.BL.Tests\StorekeeperAssistant.BL.Tests.csproj", "{9D75A4DC-F5F0-44B2-88B8-9743FDED3EE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,9 +55,16 @@ Global
 		{BA8DE30D-A859-49F0-9601-757C6B30E1CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA8DE30D-A859-49F0-9601-757C6B30E1CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA8DE30D-A859-49F0-9601-757C6B30E1CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D75A4DC-F5F0-44B2-88B8-9743FDED3EE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D75A4DC-F5F0-44B2-88B8-9743FDED3EE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D75A4DC-F5F0-44B2-88B8-9743FDED3EE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D75A4DC-F5F0-44B2-88B8-9743FDED3EE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9D75A4DC-F5F0-44B2-88B8-9743FDED3EE2} = {33267518-14D9-4EEB-8568-214AFDD522AA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8F097E5B-0990-40EB-98C3-87B5067B1FE1}

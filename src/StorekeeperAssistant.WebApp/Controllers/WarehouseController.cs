@@ -15,7 +15,7 @@ namespace StorekeeperAssistant.WebApp.Controllers
         }
 
         [HttpGet("warehouses/get")]
-        public async Task<IActionResult> GetWarehousesAsync(GetWarehouseRequest request)
+        public async Task<IActionResult> GetAsync(GetWarehouseRequest request)
         {
             var response = await _warehouseRemoteCallService.GetAsync(request);
 

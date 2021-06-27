@@ -16,7 +16,7 @@ const client = {
     /**
     * Получить предметы инвентаризации склада по идентификатору склада
     */
-    getWarehouseInventoryItemByWarehouseId: (warehouseId) => axios.get(api.GetWarehouseInventoryItemByWarehouseId + '/' + warehouseId),
+    getWarehouseInventoryItems: (warehouseId) => axios.get(api.GetWarehouseInventoryItems + '/' + warehouseId),
     /**
     * Создать перемещение
     */

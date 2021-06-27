@@ -14,14 +14,14 @@ namespace StorekeeperAssistant.WebApp.Controllers
             _warehouseInventoryItemRemoteCallService = warehouseInventoryItemRemoteCallService;
         }
 
-        [HttpGet("warehouse-inventory-item/report")]
+        [HttpGet("warehouse-inventory-items/report")]
         public IActionResult Report()
         {
             return View();
         } 
 
-        [HttpGet("warehouse-inventory-item/get-by-warehouse-id/{WarehouseId:int}")]
-        public async Task<IActionResult> GetWarehouseInventoryItemByWarehouseIdAsync(GetWarehouseInventoryItemRequest request)
+        [HttpGet("warehouse-inventory-items/get/{WarehouseId:int}")]
+        public async Task<IActionResult> GetAsync(GetWarehouseInventoryItemRequest request)
         {
             var response = await _warehouseInventoryItemRemoteCallService.GetAsync(request);
 

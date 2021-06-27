@@ -8,7 +8,9 @@ using StorekeeperAssistant.BL.Services.WarehouseInventoryItems;
 using StorekeeperAssistant.BL.Services.WarehouseInventoryItems.Implementation;
 using StorekeeperAssistant.BL.Services.Warehouses;
 using StorekeeperAssistant.BL.Services.Warehouses.Implementation;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("StorekeeperAssistant.BL.Tests")]
 namespace StorekeeperAssistant.BL
 {
     public static class ServiceCollectionExtensions

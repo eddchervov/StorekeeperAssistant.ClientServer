@@ -36,7 +36,7 @@ namespace StorekeeperAssistant.WebApp.Controllers
         /// Получить список всех перемещений и ТМЦ
         /// </summary>
         [HttpGet("movings/get")]
-        public async Task<IActionResult> GetMovingsAsync(GetMovingRequest request)
+        public async Task<IActionResult> GetAsync(GetMovingRequest request)
         {
             var response = await _movingRemoteCallService.GetAsync(request);
             return Json(response);
@@ -46,7 +46,7 @@ namespace StorekeeperAssistant.WebApp.Controllers
         /// Создать перемещение
         /// </summary>
         [HttpPost("movings/create")]
-        public async Task<IActionResult> CreateMovingAsync([FromBody]CreateMovingRequest request)
+        public async Task<IActionResult> CreateAsync([FromBody]CreateMovingRequest request)
         {
             var response = await _movingRemoteCallService.CreateAsync(request);
             return Json(response);
@@ -56,7 +56,7 @@ namespace StorekeeperAssistant.WebApp.Controllers
         /// Создать перемещение
         /// </summary>
         [HttpPost("movings/delete")]
-        public async Task<IActionResult> DeleteMovingAsync([FromBody] DeleteMovingRequest request)
+        public async Task<IActionResult> DeleteAsync([FromBody] DeleteMovingRequest request)
         {
             var response = await _movingRemoteCallService.DeleteAsync(request);
             return Json(response);

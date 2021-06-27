@@ -2,6 +2,7 @@
 using StorekeeperAssistant.DAL.Entities;
 using StorekeeperAssistant.DAL.Repositories;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace StorekeeperAssistant.BL.Services.Warehouses.Implementation
