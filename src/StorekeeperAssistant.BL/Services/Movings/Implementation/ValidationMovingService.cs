@@ -12,14 +12,47 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
         private readonly IWarehouseRepository _warehouseRepository;
         private readonly IWarehouseInventoryItemRepository _warehouseInventoryItemRepository;
         private readonly IInventoryItemRepository _inventoryItemRepository;
+        private readonly IMovingRepository _movingRepository;
 
         public ValidationMovingService(IWarehouseRepository warehouseRepository,
             IWarehouseInventoryItemRepository warehouseInventoryItemRepository,
-            IInventoryItemRepository nomenclatureRepository)
+            IInventoryItemRepository inventoryItemRepository,
+            IMovingRepository movingRepository)
         {
             _warehouseRepository = warehouseRepository;
             _warehouseInventoryItemRepository = warehouseInventoryItemRepository;
-            _inventoryItemRepository = nomenclatureRepository;
+            _inventoryItemRepository = inventoryItemRepository;
+            _movingRepository = movingRepository;
+        }
+
+        public BaseResponse Validation(GetMovingRequest request)
+        {
+            var response = new DeleteMovingResponse { IsSuccess = true, Message = string.Empty };
+
+            if(request.TakeCount < 1)
+            {
+                response.IsSuccess = false;
+                response.Message = $"{nameof(request.TakeCount)} не может быть меньше 1";
+                return response;
+            }
+
+            if (request.SkipCount < 0)
+            {
+                response.IsSuccess = false;
+                response.Message = $"{nameof(request.SkipCount)} не может быть меньше 0";
+                return response;
+            }
+
+            return response;
+        }
+
+        public DeleteMovingResponse ErrorResponse(int movingId)
+        {
+            var response = new DeleteMovingResponse { IsSuccess = true, Message = string.Empty };
+
+            response.IsSuccess = false;
+            response.Message = $"Перемещение с id={movingId} не найдено";
+            return response;
         }
 
         public async Task<BaseResponse> ValidationAsync(CreateMovingRequest request)

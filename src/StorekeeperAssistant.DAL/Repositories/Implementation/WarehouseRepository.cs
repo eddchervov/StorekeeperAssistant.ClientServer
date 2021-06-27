@@ -22,12 +22,12 @@ namespace StorekeeperAssistant.DAL.Repositories.Implementation
 
         public async Task<IEnumerable<Warehouse>> GetByIdsAsync(IEnumerable<int> ids)
         {
-            return await DbSet.Where(x => ids.Contains(x.Id)).ToListAsync();
+            return await DbSet.Where(x => x.IsDeleted == false && ids.Contains(x.Id)).ToListAsync();
         }
 
         public async Task<IEnumerable<Warehouse>> GetAsync()
         {
-            return await DbSet.ToListAsync();
+            return await DbSet.Where(x => x.IsDeleted == false).ToListAsync();
         }
     }
 }

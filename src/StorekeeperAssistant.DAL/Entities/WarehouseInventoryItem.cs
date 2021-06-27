@@ -33,7 +33,5 @@ namespace StorekeeperAssistant.DAL.Entities
         public int MovingId { get; set; }
         [ForeignKey("MovingId")]
         public Moving Moving { get; set; }
-
-        public bool IsDeleted { get; set; }
     }
 }

@@ -19,7 +19,7 @@ namespace StorekeeperAssistant.DAL.Repositories.Implementation
         {
             var warehouseInventoryItems = DbSet
                 .OrderByDescending(x => x.DateTime)
-                .Where(x => x.WarehouseId == warehouseId && x.InventoryItemId == inventoryItemId && x.IsDeleted == false);
+                .Where(x => x.WarehouseId == warehouseId && x.InventoryItemId == inventoryItemId);
                 
             if (maxDateTime != null)
             {
@@ -33,7 +33,7 @@ namespace StorekeeperAssistant.DAL.Repositories.Implementation
         {
             var warehouseInventoryItems = DbSet
                 .OrderByDescending(x => x.DateTime)
-                .Where(x => warehouseIds.Contains(x.WarehouseId) && inventoryItemIds.Contains(x.InventoryItemId) && x.IsDeleted == false);
+                .Where(x => warehouseIds.Contains(x.WarehouseId) && inventoryItemIds.Contains(x.InventoryItemId));
 
             if (maxDateTime != null)
             {

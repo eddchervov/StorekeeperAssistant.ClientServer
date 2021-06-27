@@ -25,7 +25,5 @@ namespace StorekeeperAssistant.DAL.Entities
         public int InventoryItemId { get; set; }
         [ForeignKey("InventoryItemId")]
         public InventoryItem InventoryItem { get; set; }
-
-        public bool IsDeleted { get; set; }
     }
 }

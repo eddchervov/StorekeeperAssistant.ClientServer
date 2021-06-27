@@ -30,8 +30,17 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
 
         public async Task<GetMovingResponse> GetAsync(GetMovingRequest request)
         {
-            var response = await _getterMovingService.GetAsync(request);
-            // TODO: добавить валидацию
+            var response = new GetMovingResponse { IsSuccess = true, Message = string.Empty };
+
+            var validationResponse = _validationMovingService.Validation(request);
+            if (validationResponse.IsSuccess)
+            {
+                return await _getterMovingService.GetAsync(request);
+            }
+
+            response.IsSuccess = false;
+            response.Message = validationResponse.Message;
+
             return response;
         }
 
@@ -56,7 +65,9 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
             var response = new DeleteMovingResponse { IsSuccess = true, Message = string.Empty };
 
             var moving = await _movingRepository.GetByIdAsync(request.MovingId);
-            // TODO: добавить валидацию
+
+            if (moving == null) return _validationMovingService.ErrorResponse(request.MovingId);
+
             var createMovingRequest = await CreateMovingRequestAsync(moving);
 
             var responseCreateMoving = await CreateAsync(createMovingRequest);

@@ -17,7 +17,7 @@ namespace StorekeeperAssistant.DAL.Repositories.Implementation
 
         public async Task<IEnumerable<InventoryItem>> GetAsync()
         {
-            return await DbSet.ToListAsync();
+            return await DbSet.Where(x => x.IsDeleted == false).ToListAsync();
         }
 
         public async Task<InventoryItem> GetByIdAsync(int id)
@@ -27,7 +27,7 @@ namespace StorekeeperAssistant.DAL.Repositories.Implementation
 
         public async Task<IEnumerable<InventoryItem>> GetByIdsAsync(IEnumerable<int> ids)
         {
-            return await DbSet.Where(x => ids.Contains(x.Id)).ToListAsync();
+            return await DbSet.Where(x => x.IsDeleted == false && ids.Contains(x.Id)).ToListAsync();
         }
     }
 }

@@ -123,8 +123,7 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
                 DateTime = utcNow,
                 Count = count,
                 WarehouseId = departureWarehouseId,
-                MovingId = movingId,
-                IsDeleted = false
+                MovingId = movingId
             };
         }
         #endregion
