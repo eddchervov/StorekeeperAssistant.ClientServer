@@ -6,9 +6,6 @@ using StorekeeperAssistant.BL.Services.WarehouseInventoryItems;
 using StorekeeperAssistant.BL.Services.WarehouseInventoryItems.Implementation;
 using StorekeeperAssistant.DAL.Entities;
 using StorekeeperAssistant.DAL.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace StorekeeperAssistant.BL.Tests.Services.WarehouseInventoryItems
@@ -30,7 +27,8 @@ namespace StorekeeperAssistant.BL.Tests.Services.WarehouseInventoryItems
             var warehouseId = new Fixture().Create<int>();
             var request = new GetWarehouseInventoryItemRequest { WarehouseId = warehouseId };
             var warehouse = new Fixture().Build<Warehouse>().With(e => e.IsDeleted, false).With(e => e.Id, warehouseId).Create();
-            _warehouseRepositoryMock.Setup(a => a.GetByIdAsync(warehouseId)).ReturnsAsync(warehouse);
+            _warehouseRepositoryMock.Setup(a => a.GetByIdAsync(warehouseId))
+                .ReturnsAsync(warehouse);
 
             IValidationWarehouseInventoryItemService service = new ValidationWarehouseInventoryItemService(_warehouseRepositoryMock.Object);
 
@@ -43,13 +41,13 @@ namespace StorekeeperAssistant.BL.Tests.Services.WarehouseInventoryItems
         }
 
         [Test]
-        public async Task Validation_Is_Not_Exist_Warehouse_Success_Test_Async()
+        public async Task Validation_Is_Not_Exist_Warehouse_Error_Test_Async()
         {
             // Arrange
             var warehouseId = new Fixture().Create<int>();
             var request = new GetWarehouseInventoryItemRequest { WarehouseId = warehouseId };
-            var warehouse = new Fixture().Build<Warehouse>().With(e => e.IsDeleted, false).Create();
-            _warehouseRepositoryMock.Setup(a => a.GetByIdAsync(warehouseId)).ReturnsAsync((Warehouse) null);
+            _warehouseRepositoryMock.Setup(a => a.GetByIdAsync(warehouseId))
+                .ReturnsAsync((Warehouse) null);
 
             IValidationWarehouseInventoryItemService service = new ValidationWarehouseInventoryItemService(_warehouseRepositoryMock.Object);
 

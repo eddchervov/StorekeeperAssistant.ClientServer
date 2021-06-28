@@ -25,7 +25,7 @@ namespace StorekeeperAssistant.BL.Services.WarehouseInventoryItems.Implementatio
 
         public async Task<GetWarehouseInventoryItemResponse> GetAsync(GetWarehouseInventoryItemRequest request)
         {
-            var response = new GetWarehouseInventoryItemResponse();
+            var response = new GetWarehouseInventoryItemResponse { IsSuccess = true, Message = string.Empty };
 
             var inventoryItemResponse = await _inventoryItemService.GetAsync(new GetInventoryItemsRequest());
 
@@ -59,12 +59,12 @@ namespace StorekeeperAssistant.BL.Services.WarehouseInventoryItems.Implementatio
 
         private WarehouseInventoryItem GetWarehouseInventoryItem(int warehouseId, int inventoryItemId)
         {
-            return _warehouseInventoryItems.FirstOrDefault(x => x.Id == warehouseId && x.InventoryItemId == inventoryItemId);
+            return _warehouseInventoryItems.FirstOrDefault(x => x.WarehouseId == warehouseId && x.InventoryItemId == inventoryItemId);
         }
 
         private async Task<IEnumerable<WarehouseInventoryItem>> GetWarehouseInventoryItemsAsync(int warehouseId, IEnumerable<int> inventoryItemIds, DateTime? dateTime)
         {
-            return await _warehouseInventoryItemRepository.GetLastAsync(new List<int>() { warehouseId }, inventoryItemIds, dateTime);
+            return await _warehouseInventoryItemRepository.GetLastesAsync(new List<int>() { warehouseId }, inventoryItemIds, dateTime);
         }
         #endregion
     }

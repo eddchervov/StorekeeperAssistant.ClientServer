@@ -29,7 +29,8 @@ namespace StorekeeperAssistant.BL.Tests.Services.Warehouses
         {
             // Arrange
             var warehouses = new Fixture().Build<Warehouse>().With(e => e.IsDeleted, false).CreateMany();
-            _warehouseRepositoryMock.Setup(a => a.GetAsync()).ReturnsAsync(warehouses);
+            _warehouseRepositoryMock.Setup(a => a.GetAsync())
+                .ReturnsAsync(warehouses);
 
             IWarehouseService warehouseService = new WarehouseService(_warehouseRepositoryMock.Object);
 
@@ -45,7 +46,8 @@ namespace StorekeeperAssistant.BL.Tests.Services.Warehouses
         {
             // Arrange
             var warehouses = new List<Warehouse>();
-            _warehouseRepositoryMock.Setup(a => a.GetAsync()).ReturnsAsync(warehouses);
+            _warehouseRepositoryMock.Setup(a => a.GetAsync())
+                .ReturnsAsync(warehouses);
 
             IWarehouseService warehouseService = new WarehouseService(_warehouseRepositoryMock.Object);
 

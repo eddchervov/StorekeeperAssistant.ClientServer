@@ -7,7 +7,7 @@ namespace StorekeeperAssistant.DAL.Repositories
 {
     public interface IWarehouseInventoryItemRepository : IBaseRepository<WarehouseInventoryItem>
     {
+        Task<IEnumerable<WarehouseInventoryItem>> GetLastesAsync(IEnumerable<int> warehouseIds, IEnumerable<int> inventoryItemIds, DateTime? maxDateTime = null);
         Task<WarehouseInventoryItem> GetLastAsync(int warehouseId, int inventoryItemId, DateTime? maxDateTime = null);
-        Task<IEnumerable<WarehouseInventoryItem>> GetLastAsync(IEnumerable<int> warehouseIds, IEnumerable<int> inventoryItemIds, DateTime? maxDateTime = null);
     }
 }

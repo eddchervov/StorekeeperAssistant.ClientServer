@@ -32,7 +32,7 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
         {
             var response = new CreateMovingResponse { IsSuccess = true, Message = string.Empty };
             var utcNow = DateTime.UtcNow;
-            _warehouseInventoryItems = await _warehouseInventoryItemRepository.GetLastAsync(request.WarehouseIds, request.InventoryItems.Select(x => x.Id));
+            _warehouseInventoryItems = await _warehouseInventoryItemRepository.GetLastesAsync(request.WarehouseIds, request.InventoryItems.Select(x => x.Id));
 
             try
             {

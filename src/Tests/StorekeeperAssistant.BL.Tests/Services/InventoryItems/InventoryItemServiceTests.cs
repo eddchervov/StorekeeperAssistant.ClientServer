@@ -27,7 +27,8 @@ namespace StorekeeperAssistant.BL.Tests.Services.InventoryItems
         {
             // Arrange
             var inventoryItems = new Fixture().Build<InventoryItem>().With(e => e.IsDeleted, false).CreateMany();
-            _inventoryItemRepositoryMock.Setup(a => a.GetAsync()).ReturnsAsync(inventoryItems);
+            _inventoryItemRepositoryMock.Setup(a => a.GetAsync())
+                .ReturnsAsync(inventoryItems);
 
             IInventoryItemService inventoryItemService = new InventoryItemService(_inventoryItemRepositoryMock.Object);
 
@@ -43,7 +44,8 @@ namespace StorekeeperAssistant.BL.Tests.Services.InventoryItems
         {
             // Arrange
             var inventoryItems = new List<InventoryItem>();
-            _inventoryItemRepositoryMock.Setup(a => a.GetAsync()).ReturnsAsync(inventoryItems);
+            _inventoryItemRepositoryMock.Setup(a => a.GetAsync())
+                .ReturnsAsync(inventoryItems);
 
             IInventoryItemService inventoryItemService = new InventoryItemService(_inventoryItemRepositoryMock.Object);
 
