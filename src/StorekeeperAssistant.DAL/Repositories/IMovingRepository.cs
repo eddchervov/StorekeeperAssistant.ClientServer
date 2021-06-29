@@ -7,6 +7,7 @@ namespace StorekeeperAssistant.DAL.Repositories
     public interface IMovingRepository : IBaseRepository<Moving>
     {
         Task<Moving> GetByIdAsync(int id);
+        Task<Moving> GetWithMovingDetailsByIdAsync(int id);
         Task<GetMovingsResponse> GetFullAsync(int skip, int take);
     }
 }

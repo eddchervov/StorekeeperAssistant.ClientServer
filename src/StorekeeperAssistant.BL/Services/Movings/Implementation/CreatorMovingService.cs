@@ -48,13 +48,13 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
 
                     if (request.IsMovingDepartureWarehouse)
                     {
-                        var warehouseInventoryItem = CreateDepartureWarehouseInventoryItem(request, inventoryItem, utcNow, moving.Id);
+                        var warehouseInventoryItem = CreateDepartureWarehouseInventoryItem(inventoryItem, request.DepartureWarehouseId.Value, moving.Id, utcNow);
                         await _warehouseInventoryItemRepository.InsertAsync(warehouseInventoryItem);
                     }
-                       
+
                     if (request.IsMovingArrivalWarehouse)
                     {
-                        var warehouseInventoryItem = CreateArrivalWarehouseInventoryItem(request, inventoryItem, utcNow, moving.Id);
+                        var warehouseInventoryItem = CreateArrivalWarehouseInventoryItem(inventoryItem, request.ArrivalWarehouseId.Value, moving.Id, utcNow);
                         await _warehouseInventoryItemRepository.InsertAsync(warehouseInventoryItem);
                     }
                 }
@@ -72,24 +72,24 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
         }
 
         #region private
-        private WarehouseInventoryItem CreateDepartureWarehouseInventoryItem(CreateMovingRequest request, CreateInventoryItemDTO inventoryItem, DateTime utcNow, int movingId)
+        private WarehouseInventoryItem CreateDepartureWarehouseInventoryItem(CreateInventoryItemDTO inventoryItem, int departureWarehouseId, int movingId, DateTime utcNow)
         {
-            var departureWarehouseInventoryItem = GetWarehouseInventoryItem(request.DepartureWarehouseId.Value, inventoryItem.Id);
+            var departureWarehouseInventoryItem = GetWarehouseInventoryItem(departureWarehouseId, inventoryItem.Id);
             var newCountDeparture = departureWarehouseInventoryItem.Count - inventoryItem.Count;
 
-            return CreateWarehouseInventoryItem(inventoryItem.Id, utcNow, newCountDeparture, request.DepartureWarehouseId.Value, movingId);
+            return CreateWarehouseInventoryItem(inventoryItem.Id, utcNow, newCountDeparture, departureWarehouseId, movingId);
         }
 
-        private WarehouseInventoryItem CreateArrivalWarehouseInventoryItem(CreateMovingRequest request, CreateInventoryItemDTO inventoryItem, DateTime utcNow, int movingId)
+        private WarehouseInventoryItem CreateArrivalWarehouseInventoryItem(CreateInventoryItemDTO inventoryItem, int arrivalWarehouseId, int movingId, DateTime utcNow)
         {
             var newCountArrival = inventoryItem.Count;
-            var arrivalWarehouseInventoryItem = GetWarehouseInventoryItem(request.ArrivalWarehouseId.Value, inventoryItem.Id);
+            var arrivalWarehouseInventoryItem = GetWarehouseInventoryItem(arrivalWarehouseId, inventoryItem.Id);
             if (arrivalWarehouseInventoryItem != null) newCountArrival += arrivalWarehouseInventoryItem.Count;
 
-           return CreateWarehouseInventoryItem(inventoryItem.Id, utcNow, newCountArrival, request.ArrivalWarehouseId.Value, movingId);
+            return CreateWarehouseInventoryItem(inventoryItem.Id, utcNow, newCountArrival, arrivalWarehouseId, movingId);
         }
 
-        private WarehouseInventoryItem GetWarehouseInventoryItem(int warehouseId, int inventoryItemId) 
+        private WarehouseInventoryItem GetWarehouseInventoryItem(int warehouseId, int inventoryItemId)
         {
             return _warehouseInventoryItems.FirstOrDefault(x => x.WarehouseId == warehouseId && x.InventoryItemId == inventoryItemId);
         }
@@ -115,14 +115,14 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
             };
         }
 
-        private WarehouseInventoryItem CreateWarehouseInventoryItem(int inventoryItemId, DateTime utcNow, int count, int departureWarehouseId, int movingId)
+        private WarehouseInventoryItem CreateWarehouseInventoryItem(int inventoryItemId, DateTime utcNow, int count, int warehouseId, int movingId)
         {
             return new WarehouseInventoryItem
             {
                 InventoryItemId = inventoryItemId,
                 DateTime = utcNow,
                 Count = count,
-                WarehouseId = departureWarehouseId,
+                WarehouseId = warehouseId,
                 MovingId = movingId
             };
         }

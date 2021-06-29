@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StorekeeperAssistant.DAL.Entities
@@ -28,5 +29,7 @@ namespace StorekeeperAssistant.DAL.Entities
         public Warehouse ArrivalWarehouse { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public ICollection<MovingDetail> MovingDetails { get; set; } = new List<MovingDetail>();
     }
 }

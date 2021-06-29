@@ -6,7 +6,9 @@ using StorekeeperAssistant.DAL.DBContext.Implementation;
 using StorekeeperAssistant.DAL.Repositories;
 using StorekeeperAssistant.DAL.Repositories.Implementation;
 using System;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("StorekeeperAssistant.BL.Tests")]
 namespace StorekeeperAssistant.DAL
 {
     public static class ServiceCollectionExtensions

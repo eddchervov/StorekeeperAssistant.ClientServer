@@ -12,19 +12,16 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
         private readonly IValidationMovingService _validationMovingService;
         private readonly ICreatorMovingService _creatorMovingService;
         private readonly IGetterMovingService _getterMovingService;
-        private readonly IMovingDetailRepository _movingDetailRepository;
         private readonly IMovingRepository _movingRepository;
 
         public MovingService(IValidationMovingService validationMovingService,
             ICreatorMovingService creatorMovingService,
             IGetterMovingService getterMovingService,
-            IMovingDetailRepository movingDetailRepository,
             IMovingRepository movingRepository)
         {
             _validationMovingService = validationMovingService;
             _creatorMovingService = creatorMovingService;
             _getterMovingService = getterMovingService;
-            _movingDetailRepository = movingDetailRepository;
             _movingRepository = movingRepository;
         }
 
@@ -64,11 +61,11 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
         {
             var response = new DeleteMovingResponse { IsSuccess = true, Message = string.Empty };
 
-            var moving = await _movingRepository.GetByIdAsync(request.MovingId);
+            var moving = await _movingRepository.GetWithMovingDetailsByIdAsync(request.MovingId);
 
             if (moving == null) return _validationMovingService.ErrorResponse(request.MovingId);
 
-            var createMovingRequest = await CreateMovingRequestAsync(moving);
+            var createMovingRequest = CreateMovingRequest(moving);
 
             var responseCreateMoving = await CreateAsync(createMovingRequest);
             if (responseCreateMoving.IsSuccess == false)
@@ -84,17 +81,15 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
             return response;
         }
 
-        private async Task<CreateMovingRequest> CreateMovingRequestAsync(Moving moving)
+        private CreateMovingRequest CreateMovingRequest(Moving moving)
         {
-            var movingDetails = await _movingDetailRepository.GetByMovingIdAsync(moving.Id);
-
             return new CreateMovingRequest
             {
                 // свап (для отката остатков)
                 ArrivalWarehouseId = moving.DepartureWarehouseId,
                 DepartureWarehouseId = moving.ArrivalWarehouseId,
                 IsDeleted = true,
-                InventoryItems = movingDetails.Select(x => new CreateInventoryItemDTO
+                InventoryItems = moving.MovingDetails.Select(x => new CreateInventoryItemDTO
                 {
                     Id = x.InventoryItemId,
                     Count = x.Count

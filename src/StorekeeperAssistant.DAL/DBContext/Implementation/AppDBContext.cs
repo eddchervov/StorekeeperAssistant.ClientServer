@@ -3,7 +3,7 @@ using StorekeeperAssistant.DAL.Entities;
 
 namespace StorekeeperAssistant.DAL.DBContext.Implementation
 {
-    internal class AppDBContext : BaseDbContext, IAppDBContext
+    public class AppDBContext : BaseDbContext, IAppDBContext
     {
         public AppDBContext(DbContextOptions options) : base(options)
         {

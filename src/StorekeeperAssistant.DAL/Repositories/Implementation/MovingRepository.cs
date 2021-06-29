@@ -19,11 +19,19 @@ namespace StorekeeperAssistant.DAL.Repositories.Implementation
             return await DbSet.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<Moving> GetWithMovingDetailsByIdAsync(int id)
+        {
+            return await DbSet
+                .Include(x => x.MovingDetails)
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task<GetMovingsResponse> GetFullAsync(int skip, int take)
         {
             var q = DbSet
                 .Include(x => x.ArrivalWarehouse)
                 .Include(x => x.DepartureWarehouse)
+                .Include(x => x.MovingDetails)
                 .Where(m => m.IsDeleted == false);
             q = q.OrderByDescending(x => x.DateTime);
 

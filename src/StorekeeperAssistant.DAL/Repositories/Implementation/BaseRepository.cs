@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace StorekeeperAssistant.DAL.Repositories.Implementation
@@ -10,12 +13,27 @@ namespace StorekeeperAssistant.DAL.Repositories.Implementation
     {
         protected DbContext DbContext { get; private set; }
 
-        protected DbSet<TEntity> DbSet { get; private set; }
+        public DbSet<TEntity> DbSet { get; private set; }
 
         public BaseRepository(DbSet<TEntity> dbSet)
         {
             DbSet = dbSet;
             DbContext = GetDbContext(dbSet);
+        }
+
+        public virtual async Task<TEntity> FirstOrDefaultAsync()
+        {
+            return await DbSet.AsNoTracking().FirstOrDefaultAsync();
+        }
+
+        public virtual async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await DbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
+        }
+
+        public IEnumerable<TEntity> Where(Func<TEntity, bool> predicate)
+        {
+            return DbSet.AsNoTracking().Where(predicate);
         }
 
         public virtual void Insert(TEntity entity)

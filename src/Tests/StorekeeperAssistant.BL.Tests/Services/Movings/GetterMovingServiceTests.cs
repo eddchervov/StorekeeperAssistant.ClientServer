@@ -7,7 +7,6 @@ using StorekeeperAssistant.BL.Services.Movings.Implementation;
 using StorekeeperAssistant.DAL.Entities;
 using StorekeeperAssistant.DAL.Models;
 using StorekeeperAssistant.DAL.Repositories;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -36,19 +35,11 @@ namespace StorekeeperAssistant.BL.Tests.Services.Movings
             var movingDetailCount = 10;
             var movingResponse = new GetMovingsResponse { TotalCount = totalCount, Movings = movings };
 
-            var movingDetails = new List<MovingDetail>();
-            foreach (var moving in movingResponse.Movings)
-                movingDetails.AddRange(new Fixture().Build<MovingDetail>().With(e => e.MovingId, moving.Id).CreateMany(movingDetailCount));
-
             _movingRepository
                 .Setup(a => a.GetFullAsync(request.SkipCount, request.TakeCount))
                 .ReturnsAsync(movingResponse);
 
-            _movingDetailRepository
-              .Setup(a => a.GetByMovingIdsAsync(It.IsAny<IEnumerable<int>>()))
-              .ReturnsAsync(movingDetails);
-
-            IGetterMovingService service = new GetterMovingService(_movingRepository.Object, _movingDetailRepository.Object);
+            IGetterMovingService service = new GetterMovingService(_movingRepository.Object);
 
             // Act
             var response = await service.GetAsync(request);

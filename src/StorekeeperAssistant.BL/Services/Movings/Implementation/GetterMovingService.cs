@@ -13,15 +13,10 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
     internal class GetterMovingService : IGetterMovingService
     {
         private readonly IMovingRepository _movingRepository;
-        private readonly IMovingDetailRepository _movingDetailRepository;
 
-        private IEnumerable<MovingDetail> _movingDetails;
-
-        public GetterMovingService(IMovingRepository movingRepository,
-            IMovingDetailRepository movingDetailRepository)
+        public GetterMovingService(IMovingRepository movingRepository)
         {
             _movingRepository = movingRepository;
-            _movingDetailRepository = movingDetailRepository;
         }
 
         public async Task<GetMovingResponse> GetAsync(GetMovingRequest request)
@@ -30,21 +25,12 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
 
             var responseDTO = await _movingRepository.GetFullAsync(request.SkipCount, request.TakeCount);
 
-            _movingDetails = await _movingDetailRepository.GetByMovingIdsAsync(responseDTO.Movings.Select(x => x.Id));
-
             response.TotalCount = responseDTO.TotalCount;
             response.Movings = responseDTO.Movings.Select(MapToDTO);
             return response;
         }
 
         #region private
-        private IEnumerable<MovingDetailDTO> GetMovingDetails(int movingId)
-        {
-            var movingDetails = _movingDetails.Where(x => x.MovingId == movingId);
-
-            return movingDetails.Select(MapToDTO);
-        }
-
         private MovingDTO MapToDTO(Moving moving)
         {
             var movingModel = new MovingDTO
@@ -53,7 +39,7 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
                 DateTime = moving.DateTime,
                 ArrivalWarehouse = MapToDTO(moving.ArrivalWarehouse),
                 DepartureWarehouse = MapToDTO(moving.DepartureWarehouse),
-                MovingDetails = GetMovingDetails(moving.Id)
+                MovingDetails = moving.MovingDetails.Select(MapToDTO)
             };
 
             return movingModel;
