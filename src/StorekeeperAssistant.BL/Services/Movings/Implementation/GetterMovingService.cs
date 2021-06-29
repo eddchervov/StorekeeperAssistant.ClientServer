@@ -53,7 +53,7 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
                 DateTime = moving.DateTime,
                 ArrivalWarehouse = MapToDTO(moving.ArrivalWarehouse),
                 DepartureWarehouse = MapToDTO(moving.DepartureWarehouse),
-                MovingDetailModels = GetMovingDetails(moving.Id)
+                MovingDetails = GetMovingDetails(moving.Id)
             };
 
             return movingModel;

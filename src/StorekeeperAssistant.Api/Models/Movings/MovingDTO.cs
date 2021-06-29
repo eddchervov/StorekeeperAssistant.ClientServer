@@ -8,7 +8,7 @@ namespace StorekeeperAssistant.Api.Models.Movings
     public class MovingDTO
     {
         public int Id { get; set; }
-        public IEnumerable<MovingDetailDTO> MovingDetailModels { get; set; } = new List<MovingDetailDTO>();
+        public IEnumerable<MovingDetailDTO> MovingDetails { get; set; } = new List<MovingDetailDTO>();
 
         /// <summary>
         /// Склад отправления
