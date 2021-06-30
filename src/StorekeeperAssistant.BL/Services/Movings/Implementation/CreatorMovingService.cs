@@ -28,35 +28,23 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
             _appDBContext = appDBContext;
         }
 
-        public async Task<CreateMovingResponse> CreateAsync(CreateMovingRequest request)
+        public async Task CreateAsync(CreateMovingRequest request)
         {
-            var response = new CreateMovingResponse { IsSuccess = true, Message = string.Empty };
             var utcNow = DateTime.UtcNow;
             _warehouseInventoryItems = await _warehouseInventoryItemRepository.GetLastesAsync(request.WarehouseIds, request.InventoryItems.Select(x => x.Id));
 
-            try
+            using var transaction = _appDBContext.BeginTransaction();
+
+            var moving = await CreateMovingAsync(request, utcNow);
+
+            foreach (var inventoryItem in request.InventoryItems)
             {
-                using var transaction = _appDBContext.BeginTransaction();
-
-                var moving = await CreateMovingAsync(request, utcNow);
-
-                foreach (var inventoryItem in request.InventoryItems)
-                {
-                    await CreateMovingDetailAsync(moving.Id, inventoryItem);
-                    await CreateDepartureWarehouseInventoryItemAsync(request, inventoryItem, moving.Id, utcNow);
-                    await CreateArrivalWarehouseInventoryItemAsync(request, inventoryItem, moving.Id, utcNow);
-                }
-
-                await transaction.CommitAsync();
-            }
-            catch (Exception ex)
-            {
-                response.IsSuccess = false;
-                response.Message = ex.ToString();
-                return response;
+                await CreateMovingDetailAsync(moving.Id, inventoryItem);
+                await CreateDepartureWarehouseInventoryItemAsync(request, inventoryItem, moving.Id, utcNow);
+                await CreateArrivalWarehouseInventoryItemAsync(request, inventoryItem, moving.Id, utcNow);
             }
 
-            return response;
+            await transaction.CommitAsync();
         }
 
         #region private

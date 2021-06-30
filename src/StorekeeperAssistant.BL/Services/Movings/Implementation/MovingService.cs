@@ -2,6 +2,7 @@
 using StorekeeperAssistant.Api.Models.Movings;
 using StorekeeperAssistant.DAL.Entities;
 using StorekeeperAssistant.DAL.Repositories;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -48,12 +49,19 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
             var validationResponse = await _validationMovingService.ValidationAsync(request);
             if (validationResponse.IsSuccess)
             {
-                return await _creatorMovingService.CreateAsync(request);
+                try
+                {
+                    await _creatorMovingService.CreateAsync(request);
+                    return response;
+                }
+                catch (Exception ex)
+                {
+                    response.Message = ex.ToString();
+                }
             }
+            else response.Message = validationResponse.Message;
 
             response.IsSuccess = false;
-            response.Message = validationResponse.Message;
-
             return response;
         }
 

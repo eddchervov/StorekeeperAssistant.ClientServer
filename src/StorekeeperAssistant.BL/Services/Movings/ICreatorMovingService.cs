@@ -5,6 +5,6 @@ namespace StorekeeperAssistant.BL.Services.Movings
 {
     public interface ICreatorMovingService
     {
-        Task<CreateMovingResponse> CreateAsync(CreateMovingRequest request);
+        Task CreateAsync(CreateMovingRequest request);
     }
 }
