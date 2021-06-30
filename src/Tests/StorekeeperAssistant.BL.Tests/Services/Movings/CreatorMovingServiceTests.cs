@@ -61,12 +61,9 @@ namespace StorekeeperAssistant.BL.Tests.Services.Movings
             ICreatorMovingService service = new CreatorMovingService(_movingRepository, _warehouseInventoryItemRepository, _movingDetailRepository, _appDBContext);
 
             // Act
-            var response = await service.CreateAsync(request);
+            await service.CreateAsync(request);
 
             // Assert
-            Assert.IsTrue(response.IsSuccess);
-            Assert.IsEmpty(response.Message);
-
             var moving = await _movingRepository.FirstOrDefaultAsync(x => x.DepartureWarehouseId == request.DepartureWarehouseId && x.ArrivalWarehouseId == request.ArrivalWarehouseId);
             Assert.IsNotNull(moving);
 
@@ -108,12 +105,9 @@ namespace StorekeeperAssistant.BL.Tests.Services.Movings
             ICreatorMovingService service = new CreatorMovingService(_movingRepository, _warehouseInventoryItemRepository, _movingDetailRepository, _appDBContext);
 
             // Act
-            var response = await service.CreateAsync(request);
+            await service.CreateAsync(request);
 
             // Assert
-            Assert.IsTrue(response.IsSuccess);
-            Assert.IsEmpty(response.Message);
-
             var moving = await _movingRepository.FirstOrDefaultAsync(x => x.DepartureWarehouseId == request.DepartureWarehouseId && x.ArrivalWarehouseId == request.ArrivalWarehouseId);
             Assert.IsNotNull(moving);
 
@@ -167,12 +161,9 @@ namespace StorekeeperAssistant.BL.Tests.Services.Movings
             ICreatorMovingService service = new CreatorMovingService(_movingRepository, _warehouseInventoryItemRepository, _movingDetailRepository, _appDBContext);
 
             // Act
-            var response = await service.CreateAsync(request);
+            await service.CreateAsync(request);
 
             // Assert
-            Assert.IsTrue(response.IsSuccess);
-            Assert.IsEmpty(response.Message);
-
             var moving = await _movingRepository.FirstOrDefaultAsync(x => x.DepartureWarehouseId == request.DepartureWarehouseId && x.ArrivalWarehouseId == request.ArrivalWarehouseId);
             Assert.IsNotNull(moving);
 
@@ -237,12 +228,9 @@ namespace StorekeeperAssistant.BL.Tests.Services.Movings
             ICreatorMovingService service = new CreatorMovingService(_movingRepository, _warehouseInventoryItemRepository, _movingDetailRepository, _appDBContext);
 
             // Act
-            var response = await service.CreateAsync(request);
+            await service.CreateAsync(request);
 
             // Assert
-            Assert.IsTrue(response.IsSuccess);
-            Assert.IsEmpty(response.Message);
-
             var moving = await _movingRepository.FirstOrDefaultAsync(x => x.DepartureWarehouseId == request.DepartureWarehouseId && x.ArrivalWarehouseId == request.ArrivalWarehouseId);
             Assert.IsNotNull(moving);
 
@@ -312,12 +300,9 @@ namespace StorekeeperAssistant.BL.Tests.Services.Movings
             ICreatorMovingService service = new CreatorMovingService(_movingRepository, _warehouseInventoryItemRepository, _movingDetailRepository, _appDBContext);
 
             // Act
-            var response = await service.CreateAsync(request);
+            await service.CreateAsync(request);
 
             // Assert
-            Assert.IsTrue(response.IsSuccess);
-            Assert.IsEmpty(response.Message);
-
             var moving = await _movingRepository.FirstOrDefaultAsync(x => x.DepartureWarehouseId == request.DepartureWarehouseId && x.ArrivalWarehouseId == request.ArrivalWarehouseId);
             Assert.IsNotNull(moving);
 
