@@ -38,25 +38,13 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
             {
                 using var transaction = _appDBContext.BeginTransaction();
 
-                var moving = CreateMoving(request.DepartureWarehouseId, request.ArrivalWarehouseId, utcNow, request.IsDeleted);
-                await _movingRepository.InsertAsync(moving);
+                var moving = await CreateMovingAsync(request, utcNow);
 
                 foreach (var inventoryItem in request.InventoryItems)
                 {
-                    var movingDetail = CreateMovingDetail(moving.Id, inventoryItem.Id, inventoryItem.Count);
-                    await _movingDetailRepository.InsertAsync(movingDetail);
-
-                    if (request.IsMovingDepartureWarehouse)
-                    {
-                        var warehouseInventoryItem = CreateDepartureWarehouseInventoryItem(inventoryItem, request.DepartureWarehouseId.Value, moving.Id, utcNow);
-                        await _warehouseInventoryItemRepository.InsertAsync(warehouseInventoryItem);
-                    }
-
-                    if (request.IsMovingArrivalWarehouse)
-                    {
-                        var warehouseInventoryItem = CreateArrivalWarehouseInventoryItem(inventoryItem, request.ArrivalWarehouseId.Value, moving.Id, utcNow);
-                        await _warehouseInventoryItemRepository.InsertAsync(warehouseInventoryItem);
-                    }
+                    await CreateMovingDetailAsync(moving.Id, inventoryItem);
+                    await CreateDepartureWarehouseInventoryItemAsync(request, inventoryItem, moving.Id, utcNow);
+                    await CreateArrivalWarehouseInventoryItemAsync(request, inventoryItem, moving.Id, utcNow);
                 }
 
                 await transaction.CommitAsync();
@@ -72,6 +60,36 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
         }
 
         #region private
+        private async Task<Moving> CreateMovingAsync(CreateMovingRequest request, DateTime utcNow)
+        {
+            var moving = CreateMoving(request, utcNow);
+            await _movingRepository.InsertAsync(moving);
+
+            return moving;
+        }
+
+        private async Task CreateMovingDetailAsync(int movingId, CreateInventoryItemDTO inventoryItem)
+        {
+            var movingDetail = CreateMovingDetail(movingId, inventoryItem);
+            await _movingDetailRepository.InsertAsync(movingDetail);
+        }
+
+        private async Task CreateDepartureWarehouseInventoryItemAsync(CreateMovingRequest request, CreateInventoryItemDTO inventoryItem, int movingId, DateTime utcNow)
+        {
+            if (request.IsMovingDepartureWarehouse == false) return;
+
+            var warehouseInventoryItem = CreateDepartureWarehouseInventoryItem(inventoryItem, request.DepartureWarehouseId.Value, movingId, utcNow);
+            await _warehouseInventoryItemRepository.InsertAsync(warehouseInventoryItem);
+        }
+
+        private async Task CreateArrivalWarehouseInventoryItemAsync(CreateMovingRequest request, CreateInventoryItemDTO inventoryItem, int movingId, DateTime utcNow)
+        {
+            if (request.IsMovingArrivalWarehouse == false) return;
+
+            var warehouseInventoryItem = CreateArrivalWarehouseInventoryItem(inventoryItem, request.ArrivalWarehouseId.Value, movingId, utcNow);
+            await _warehouseInventoryItemRepository.InsertAsync(warehouseInventoryItem);
+        }
+
         private WarehouseInventoryItem CreateDepartureWarehouseInventoryItem(CreateInventoryItemDTO inventoryItem, int departureWarehouseId, int movingId, DateTime utcNow)
         {
             var departureWarehouseInventoryItem = GetWarehouseInventoryItem(departureWarehouseId, inventoryItem.Id);
@@ -94,24 +112,24 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
             return _warehouseInventoryItems.FirstOrDefault(x => x.WarehouseId == warehouseId && x.InventoryItemId == inventoryItemId);
         }
 
-        private Moving CreateMoving(int? departureWarehouseId, int? arrivalWarehouseId, DateTime utcNow, bool isDeleted)
+        private Moving CreateMoving(CreateMovingRequest request, DateTime utcNow)
         {
             return new Moving
             {
-                DepartureWarehouseId = departureWarehouseId,
-                ArrivalWarehouseId = arrivalWarehouseId,
-                IsDeleted = isDeleted,
+                DepartureWarehouseId = request.DepartureWarehouseId,
+                ArrivalWarehouseId = request.ArrivalWarehouseId,
+                IsDeleted = request.IsDeleted,
                 DateTime = utcNow
             };
         }
 
-        private MovingDetail CreateMovingDetail(int movingId, int nomenclatureId, int count)
+        private MovingDetail CreateMovingDetail(int movingId, CreateInventoryItemDTO inventoryItem)
         {
             return new MovingDetail
             {
                 MovingId = movingId,
-                InventoryItemId = nomenclatureId,
-                Count = count
+                InventoryItemId = inventoryItem.Id,
+                Count = inventoryItem.Count
             };
         }
 
