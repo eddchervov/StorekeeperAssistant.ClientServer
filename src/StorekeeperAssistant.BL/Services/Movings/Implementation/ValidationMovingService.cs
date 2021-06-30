@@ -3,6 +3,7 @@ using StorekeeperAssistant.Api.Models.Movings;
 using StorekeeperAssistant.DAL.Entities;
 using StorekeeperAssistant.DAL.Repositories;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace StorekeeperAssistant.BL.Services.Movings.Implementation
@@ -12,24 +13,21 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
         private readonly IWarehouseRepository _warehouseRepository;
         private readonly IWarehouseInventoryItemRepository _warehouseInventoryItemRepository;
         private readonly IInventoryItemRepository _inventoryItemRepository;
-        private readonly IMovingRepository _movingRepository;
 
         public ValidationMovingService(IWarehouseRepository warehouseRepository,
             IWarehouseInventoryItemRepository warehouseInventoryItemRepository,
-            IInventoryItemRepository inventoryItemRepository,
-            IMovingRepository movingRepository)
+            IInventoryItemRepository inventoryItemRepository)
         {
             _warehouseRepository = warehouseRepository;
             _warehouseInventoryItemRepository = warehouseInventoryItemRepository;
             _inventoryItemRepository = inventoryItemRepository;
-            _movingRepository = movingRepository;
         }
 
         public BaseResponse Validation(GetMovingRequest request)
         {
             var response = new DeleteMovingResponse { IsSuccess = true, Message = string.Empty };
 
-            if(request.TakeCount < 1)
+            if (request.TakeCount < 1)
             {
                 response.IsSuccess = false;
                 response.Message = $"{nameof(request.TakeCount)} не может быть меньше 1";
@@ -72,10 +70,19 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
                 return response;
             }
 
-            Warehouse departureWarehouse = null;
-            if (request.DepartureWarehouseId != null)
+            if (request.InventoryItems.Count == 0)
             {
-                departureWarehouse = await _warehouseRepository.GetByIdAsync(request.DepartureWarehouseId.Value);
+                response.IsSuccess = false;
+                response.Message = $"Не выбраны перемещаемые ТМЦ";
+                return response;
+            }
+
+            var warehouses = await _warehouseRepository.GetByIdsAsync(request.WarehouseIds);
+
+            Warehouse departureWarehouse = null;
+            if (request.IsMovingDepartureWarehouse)
+            {
+                departureWarehouse = warehouses.FirstOrDefault(x => x.Id == request.DepartureWarehouseId.Value);
                 if (departureWarehouse == null)
                 {
                     response.IsSuccess = false;
@@ -84,9 +91,9 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
                 }
             }
 
-            if (request.ArrivalWarehouseId != null)
+            if (request.IsMovingArrivalWarehouse)
             {
-                Warehouse arrivalWarehouse = await _warehouseRepository.GetByIdAsync(request.ArrivalWarehouseId.Value);
+                var arrivalWarehouse = warehouses.FirstOrDefault(x => x.Id == request.ArrivalWarehouseId.Value);
                 if (arrivalWarehouse == null)
                 {
                     response.IsSuccess = false;
@@ -95,29 +102,25 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
                 }
             }
 
-            if (request.InventoryItems.Count == 0)
-            {
-                response.IsSuccess = false;
-                response.Message = $"Не выбраны перемещаемые ТМЦ";
-                return response;
-            }
+            var createInventoryItemIds = request.InventoryItems.Select(x => x.Id);
+            var inventoryItems = await _inventoryItemRepository.GetByIdsAsync(createInventoryItemIds);
+            var warehouseInventoryItems = await _warehouseInventoryItemRepository.GetLastesAsync(request.WarehouseIds, createInventoryItemIds);
 
             var inventoryItemIds = new List<int>();
-
-            foreach (var inventoryItemModel in request.InventoryItems)
+            foreach (var createInventoryItem in request.InventoryItems)
             {
-                var inventoryItem = await _inventoryItemRepository.GetByIdAsync(inventoryItemModel.Id);
+                var inventoryItem = inventoryItems.FirstOrDefault(x => x.Id == createInventoryItem.Id);
                 if (inventoryItem == null)
                 {
                     response.IsSuccess = false;
-                    response.Message = $"Нуменклатуры с id={inventoryItemModel.Id} не найдено";
+                    response.Message = $"Нуменклатуры с id={createInventoryItem.Id} не найдено";
                     return response;
                 }
 
-                if (inventoryItemModel.Count == 0)
+                if (createInventoryItem.Count == 0)
                 {
                     response.IsSuccess = false;
-                    response.Message = $"Нуменклатуры с id={inventoryItemModel.Id} выбранно кл-во равное 0";
+                    response.Message = $"Нуменклатуры с id={createInventoryItem.Id} выбранно кл-во равное 0";
                     return response;
                 }
 
@@ -128,34 +131,34 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
                     return response;
                 }
 
-                if (request.DepartureWarehouseId != null)
+                if (request.IsMovingDepartureWarehouse)
                 {
-                    var departureWarehouseInventoryItem = await _warehouseInventoryItemRepository.GetLastAsync(request.DepartureWarehouseId.Value, inventoryItem.Id);
-                    var newCountDeparture = departureWarehouseInventoryItem.Count - inventoryItemModel.Count;
+                    var departureWarehouseInventoryItem = warehouseInventoryItems.FirstOrDefault(x => x.WarehouseId == request.DepartureWarehouseId.Value && x.InventoryItemId == inventoryItem.Id);
+                    var newCountDeparture = departureWarehouseInventoryItem.Count - createInventoryItem.Count;
                     if (newCountDeparture < 0)
                     {
                         response.IsSuccess = false;
-                        response.Message = $"Нельзя расходовать нуменклатуру id={inventoryItem.Id} в кол-ве: {inventoryItemModel.Count}, недостаточно остатков на складе, остаток: {departureWarehouseInventoryItem.Count}";
+                        response.Message = $"Нельзя расходовать нуменклатуру id={inventoryItem.Id} в кол-ве: {createInventoryItem.Count}. Недостаточно остатков на складе, остаток: {departureWarehouseInventoryItem.Count}";
                         return response;
                     }
                 }
 
                 inventoryItemIds.Add(inventoryItem.Id);
 
-                if (departureWarehouse != null)
+                if (request.IsMovingDepartureWarehouse)
                 {
-                    var warehouseInventoryItem = await _warehouseInventoryItemRepository.GetLastAsync(departureWarehouse.Id, inventoryItemModel.Id);
+                    var warehouseInventoryItem = warehouseInventoryItems.FirstOrDefault(x => x.WarehouseId == departureWarehouse.Id && x.InventoryItemId == createInventoryItem.Id);
                     if (warehouseInventoryItem == null)
                     {
                         response.IsSuccess = false;
-                        response.Message = $"У выбраного склада отправления с id={departureWarehouse.Id} нет ТМЦ с id={inventoryItemModel.Id}";
+                        response.Message = $"У выбраного склада отправления с id={departureWarehouse.Id} нет ТМЦ с id={createInventoryItem.Id}";
                         return response;
                     }
 
-                    if (warehouseInventoryItem.Count < inventoryItemModel.Count)
+                    if (warehouseInventoryItem.Count < createInventoryItem.Count)
                     {
                         response.IsSuccess = false;
-                        response.Message = $"У выбраного ТМЦ с id={inventoryItemModel.Id} запрашивается больше товаров, чем имеется на складе отправления с id={departureWarehouse.Id}";
+                        response.Message = $"У выбраного ТМЦ с id={createInventoryItem.Id} запрашивается больше товаров, чем имеется на складе отправления с id={departureWarehouse.Id}";
                         return response;
                     }
                 }
