@@ -15,21 +15,7 @@ namespace StorekeeperAssistant.DAL.Repositories.Implementation
         {
         }
 
-        public async Task<WarehouseInventoryItem> GetLastAsync(int warehouseId, int inventoryItemId, DateTime? maxDateTime = null)
-        {
-            var warehouseInventoryItems = DbSet
-                .OrderByDescending(x => x.DateTime)
-                .Where(x => x.WarehouseId == warehouseId && x.InventoryItemId == inventoryItemId);
-                
-            if (maxDateTime != null)
-            {
-                warehouseInventoryItems = warehouseInventoryItems.Where(x => x.DateTime < maxDateTime);
-            }
-
-            return await warehouseInventoryItems.FirstOrDefaultAsync();
-        }
-
-        public async Task<IEnumerable<WarehouseInventoryItem>> GetLastesAsync(IEnumerable<int> warehouseIds, IEnumerable<int> inventoryItemIds, DateTime? maxDateTime = null)
+        public async Task<IEnumerable<WarehouseInventoryItem>> GetAsync(IEnumerable<int> warehouseIds, IEnumerable<int> inventoryItemIds, DateTime? maxDateTime = null)
         {
             var warehouseInventoryItems = DbSet
                 .OrderByDescending(x => x.DateTime)

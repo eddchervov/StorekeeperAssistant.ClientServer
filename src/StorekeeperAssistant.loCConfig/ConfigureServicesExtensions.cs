@@ -13,10 +13,10 @@ namespace StorekeeperAssistant.loCConfig
             services.AddSwaggerGen(setupAction =>
             {
                 setupAction.SwaggerDoc(
-                   name: "StorekeeperAssistant",
+                   name: "StorekeeperAssistant.WebApi",
                    info: new OpenApiInfo()
                    {
-                       Title = "StorekeeperAssistant API",
+                       Title = "StorekeeperAssistant.WebApi",
                        Version = "1.0",
                        Description = "API..",
                        Contact = new OpenApiContact()
@@ -55,8 +55,8 @@ namespace StorekeeperAssistant.loCConfig
             app.UseSwaggerUI(setupAction =>
             {
                 setupAction.SwaggerEndpoint(
-                    url: "/swagger/StorekeeperAssistant/swagger.json",
-                    name: "StorekeeperAssistant API");
+                    url: "/swagger/StorekeeperAssistant.WebApi/swagger.json",
+                    name: "StorekeeperAssistant.WebApi");
                 //setupAction.RoutePrefix = ""; --> To be able to access it from this URL: https://localhost:5001/swagger/index.html
 
                 setupAction.DefaultModelExpandDepth(2);

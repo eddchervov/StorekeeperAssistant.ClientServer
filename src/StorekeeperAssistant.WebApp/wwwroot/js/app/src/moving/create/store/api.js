@@ -7,10 +7,10 @@
     /**
      * Получить нуменклатуры
      */
-    GetNomenclatures: "/nomenclatures/get",
+    GetInventoryItems: "/inventory-items/get",
 
     /**
-    * Получить предметы инвентаризации склада по идентификатору склада
+    * Получить остатки склада
     */
     GetWarehouseInventoryItems: "/warehouse-inventory-items/get",
 

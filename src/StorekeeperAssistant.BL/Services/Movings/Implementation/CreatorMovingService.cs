@@ -31,7 +31,7 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
         public async Task CreateAsync(CreateMovingRequest request)
         {
             var utcNow = DateTime.UtcNow;
-            _warehouseInventoryItems = await _warehouseInventoryItemRepository.GetLastesAsync(request.WarehouseIds, request.InventoryItems.Select(x => x.Id));
+            _warehouseInventoryItems = await _warehouseInventoryItemRepository.GetAsync(request.WarehouseIds, request.InventoryItems.Select(x => x.Id));
 
             using var transaction = _appDBContext.BeginTransaction();
 

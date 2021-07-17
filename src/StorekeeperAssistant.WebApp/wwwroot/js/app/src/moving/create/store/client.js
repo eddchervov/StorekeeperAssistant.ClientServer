@@ -12,11 +12,11 @@ const client = {
     /**
     * Получить нуменклатуры
     */
-    getNomenclatures: () => axios.get(api.GetNomenclatures),
+    getInventoryItems: () => axios.get(api.GetInventoryItems),
     /**
-    * Получить предметы инвентаризации склада по идентификатору склада
+    * Получить остатки склада
     */
-    getWarehouseInventoryItems: (warehouseId) => axios.get(api.GetWarehouseInventoryItems + '/' + warehouseId),
+    getWarehouseInventoryItems: ({ warehouseId }) => axios.get(api.GetWarehouseInventoryItems + '/' + warehouseId),
     /**
     * Создать перемещение
     */

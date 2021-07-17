@@ -35,7 +35,7 @@ namespace StorekeeperAssistant.BL.Services.WarehouseInventoryItems.Implementatio
             foreach (var inventoryItem in inventoryItemResponse.InventoryItems)
             {
                 var warehouseInventoryItem = GetWarehouseInventoryItem(request.WarehouseId, inventoryItem.Id);
-                if (warehouseInventoryItem != null)
+                if (warehouseInventoryItem != null && warehouseInventoryItem.Count > 0)
                 {
                     var warehouseInventoryItemDTO = MapToDTO(warehouseInventoryItem, inventoryItem);
                     warehouseInventoryItemDTOs.Add(warehouseInventoryItemDTO);
@@ -64,7 +64,7 @@ namespace StorekeeperAssistant.BL.Services.WarehouseInventoryItems.Implementatio
 
         private async Task<IEnumerable<WarehouseInventoryItem>> GetWarehouseInventoryItemsAsync(int warehouseId, IEnumerable<int> inventoryItemIds, DateTime? dateTime)
         {
-            return await _warehouseInventoryItemRepository.GetLastesAsync(new List<int>() { warehouseId }, inventoryItemIds, dateTime);
+            return await _warehouseInventoryItemRepository.GetAsync(new List<int>() { warehouseId }, inventoryItemIds, dateTime);
         }
         #endregion
     }

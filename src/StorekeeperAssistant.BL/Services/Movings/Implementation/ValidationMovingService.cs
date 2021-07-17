@@ -104,7 +104,7 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
 
             var createInventoryItemIds = request.InventoryItems.Select(x => x.Id);
             var inventoryItems = await _inventoryItemRepository.GetByIdsAsync(createInventoryItemIds);
-            var warehouseInventoryItems = await _warehouseInventoryItemRepository.GetLastesAsync(request.WarehouseIds, createInventoryItemIds);
+            var warehouseInventoryItems = await _warehouseInventoryItemRepository.GetAsync(request.WarehouseIds, createInventoryItemIds);
 
             var inventoryItemIds = new List<int>();
             foreach (var createInventoryItem in request.InventoryItems)

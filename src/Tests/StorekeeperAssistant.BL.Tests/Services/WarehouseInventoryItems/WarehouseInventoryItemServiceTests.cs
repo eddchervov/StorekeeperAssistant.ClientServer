@@ -46,7 +46,7 @@ namespace StorekeeperAssistant.BL.Tests.Services.WarehouseInventoryItems
                 .ReturnsAsync(inventoryItemResponse);
 
             _warehouseInventoryItemRepositoryMock
-              .Setup(a => a.GetLastesAsync(It.IsAny<IEnumerable<int>>(), It.IsAny<IEnumerable<int>>(), null))
+              .Setup(a => a.GetAsync(It.IsAny<IEnumerable<int>>(), It.IsAny<IEnumerable<int>>(), null))
               .ReturnsAsync(warehouseInventoryItems);
 
             IWarehouseInventoryItemService service = new WarehouseInventoryItemService(_warehouseInventoryItemRepositoryMock.Object, _inventoryItemServiceMock.Object);

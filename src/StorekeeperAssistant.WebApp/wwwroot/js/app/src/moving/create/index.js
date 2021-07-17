@@ -1,6 +1,6 @@
 ﻿import Vue from "vue"
-import App from "./create.vue"
-import store from "./store/index"
+import App from "./index.vue"
+import store from "./store/vuex"
 
 new Vue({
 	el: '#create-moving-app',
