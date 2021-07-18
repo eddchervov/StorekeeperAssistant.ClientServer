@@ -20,6 +20,9 @@
   <ItemGroup>
     <Folder Include="wwwroot\fonts\" />
     <Folder Include="wwwroot\js\app\build\" />
+    <Folder Include="wwwroot\js\app\src\moving\list\" />
+    <Folder Include="wwwroot\js\app\src\moving\NewFolder\" />
+    <Folder Include="wwwroot\js\app\src\NewFolder\" />
   </ItemGroup>
 
 </Project>

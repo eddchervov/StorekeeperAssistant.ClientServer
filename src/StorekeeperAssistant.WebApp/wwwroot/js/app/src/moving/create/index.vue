@@ -4,6 +4,10 @@
     <div>
 
         <template>
+            <error-form />
+        </template>
+
+        <template>
             <select-operation />
         </template>
 
@@ -26,9 +30,6 @@
     </div>
 </template>
 
-
-
-
 <script>
     import api from "./store/api"
     import { mapActions } from 'vuex'
@@ -38,6 +39,7 @@
     import ConsumptionForm from "./components/ConsumptionForm.vue"
     import MovingForm from "./components/MovingForm.vue"
     import SaveForm from "./components/SaveForm.vue"
+    import ErrorForm from "./components/ErrorForm.vue"
 
     export default {
         components: {
@@ -45,7 +47,8 @@
             "coming-form": ComingForm,
             "consumption-form": ConsumptionForm,
             "moving-form": MovingForm,
-            "save-form": SaveForm
+            "save-form": SaveForm,
+            "error-form": ErrorForm
         },
         computed: {
             isMoving() {

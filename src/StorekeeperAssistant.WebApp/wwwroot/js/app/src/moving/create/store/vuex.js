@@ -2,13 +2,14 @@ import Vue from "vue"
 import Vuex from "vuex"
 import api from "./api"
 import mutations from "./mutations"
-import { loadWarehouses, loadInventoryItems, loadDepartureWarehouseInventoryItems, loadArrivalWarehouseInventoryItems  } from "./moving-loader"
+import { loadWarehouses, loadInventoryItems, loadDepartureWarehouseInventoryItems, loadArrivalWarehouseInventoryItems } from "./moving-loader"
 import { saveMoving } from "./moving-save"
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        maxValueInventoryItem: 10000,
         operation: {
             COMING: 1,
             CONSUMPTION: 2,
@@ -24,6 +25,7 @@ export default new Vuex.Store({
         selectArrivalWarehouseId: null,
 
         isLoadDepartureWarehouseInventoryItems: true,
+        isCreateMoving: false,
 
         //lists
         warehouses: [],
@@ -41,11 +43,18 @@ export default new Vuex.Store({
         arrivalWarehouses: state => state.arrivalWarehouses,
         inventoryItems: state => state.inventoryItems,
         departureWarehouseInventoryItems: state => state.departureWarehouseInventoryItems,
-        arrivalWarehouseInventoryItems: state => state.arrivalWarehouseInventoryItems
+        arrivalWarehouseInventoryItems: state => state.arrivalWarehouseInventoryItems,
+        serverErrors: state => state.serverErrors
     },
     mutations: {
         [mutations.setData]: (state, { name, value }) => state[name] = value,
-        [mutations.setError]: (state, { msg }) => state.serverErrors.push(msg),
+        [mutations.setError]: (state, { msg }) => {
+            state.serverErrors.push(msg);
+            setTimeout(() => {
+                var index = state.serverErrors.indexOf(msg);
+                state.serverErrors.splice(index, 1);
+            }, 3000);
+        },
 
         [mutations.changeSelectOperation]: (state, value) => {
             state.selectOperation = value;
@@ -66,6 +75,7 @@ export default new Vuex.Store({
             loadDepartureWarehouseInventoryItems({ commit }, { warehouseId })
         },
         [api.CreateMoving]({ commit }, data) {
+            this.state.isCreateMoving = true;
             saveMoving({ commit }, data)
         }
     }

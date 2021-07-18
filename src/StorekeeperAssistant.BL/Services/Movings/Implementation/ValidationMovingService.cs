@@ -57,6 +57,13 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
         {
             var response = new BaseResponse { IsSuccess = true, Message = string.Empty };
 
+            if (request == null)
+            {
+                response.IsSuccess = false;
+                response.Message = $"Некорректный, пустой запрос";
+                return response;
+            }
+
             if (request.DepartureWarehouseId == null && request.ArrivalWarehouseId == null)
             {
                 response.IsSuccess = false;

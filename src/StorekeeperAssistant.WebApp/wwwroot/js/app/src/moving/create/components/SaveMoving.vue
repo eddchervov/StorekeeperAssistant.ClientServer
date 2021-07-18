@@ -3,7 +3,7 @@
 
     <div>
 
-        <button class="btn btn-primary" @click="click_moving" :disabled="isLoadDepartureWarehouseInventoryItems">{{text}}</button>
+        <button class="btn btn-primary" @click="click_moving" :disabled="isLoadDepartureWarehouseInventoryItems || isCreateMoving">{{text}}</button>
 
     </div>
 </template>
@@ -13,6 +13,7 @@
     import { validationMoving } from "../store/validation"
     import api from "../store/api"
     import { mapActions } from 'vuex'
+    import mutations from "../store/mutations"
 
     export default {
         props: {
@@ -22,6 +23,9 @@
             }
         },
         computed: {
+            isCreateMoving() {
+                return this.$store.state.isCreateMoving
+            },
             isLoadDepartureWarehouseInventoryItems() {
                 return this.$store.state.isLoadDepartureWarehouseInventoryItems
             }
@@ -51,7 +55,7 @@
                     this[api.CreateMoving](data)
                 }
                 else
-                    alert(result.messages)
+                    result.messages.forEach(x => { this.$store.commit(mutations.setError, { msg: x }) });
             }
         }
     }
