@@ -15,10 +15,10 @@
 </template>
 
 <script>
-    import SelectComponent from "./Select.vue";
+    import Select from "../components/Select.vue"
     export default {
         components: {
-            'v-select': SelectComponent
+            'v-select': Select
         },
         computed: {
             selectOperation: {

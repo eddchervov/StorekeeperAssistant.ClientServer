@@ -15,7 +15,7 @@
 </template>
 
 <script>
-    import Select from "./Select.vue";
+    import Select from "../components/Select.vue"
     import mutations from "../store/mutations"
     export default {
         components: {

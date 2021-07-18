@@ -13,16 +13,20 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
     internal class GetterMovingService : IGetterMovingService
     {
         private readonly IMovingRepository _movingRepository;
+        private readonly IInventoryItemRepository _inventoryItemRepository;
 
-        public GetterMovingService(IMovingRepository movingRepository)
+        public GetterMovingService(IMovingRepository movingRepository, IInventoryItemRepository inventoryItemRepository)
         {
             _movingRepository = movingRepository;
+            _inventoryItemRepository = inventoryItemRepository;
         }
+
+        private IEnumerable<InventoryItem> _inventoryItems;
 
         public async Task<GetMovingResponse> GetAsync(GetMovingRequest request)
         {
             var response = new GetMovingResponse { IsSuccess = true, Message = string.Empty };
-
+            _inventoryItems =  await _inventoryItemRepository.GetAsync();
             var responseDTO = await _movingRepository.GetFullAsync(request.SkipCount, request.TakeCount);
 
             response.TotalCount = responseDTO.TotalCount;
@@ -47,14 +51,15 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
 
         private MovingDetailDTO MapToDTO(MovingDetail movingDetail)
         {
+            var inventoryItem = _inventoryItems.First(x => x.Id == movingDetail.InventoryItemId);
             return new MovingDetailDTO
             {
                 Id = movingDetail.Id,
                 Count = movingDetail.Count,
                 InventoryItem = new InventoryItemDTO
                 {
-                    Id = movingDetail.InventoryItem.Id,
-                    Name = movingDetail.InventoryItem.Name
+                    Id = inventoryItem.Id,
+                    Name = inventoryItem.Name
                 }
             };
         }

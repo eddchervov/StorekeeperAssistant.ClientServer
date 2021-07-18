@@ -5,7 +5,8 @@ const mode = process.env.mode
 const config = {
     mode: mode,
     entry: {
-        "moving-create": "./src/moving/create/index.js"
+        "moving-create": "./src/moving/create/index.js",
+        "moving-list": "./src/moving/list/index.js",
     },
     output: {
         path: path.resolve(__dirname, './build'),

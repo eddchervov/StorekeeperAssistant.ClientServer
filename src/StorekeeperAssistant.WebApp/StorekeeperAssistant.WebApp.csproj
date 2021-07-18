@@ -5,7 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-
+    <Compile Remove="wwwroot\js\app\src\moving\list\NewFolder\**" />
+    <Compile Remove="wwwroot\js\app\src\moving\NewFolder\**" />
+    <Content Remove="wwwroot\js\app\src\moving\list\NewFolder\**" />
+    <Content Remove="wwwroot\js\app\src\moving\NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\js\app\src\moving\list\NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\js\app\src\moving\NewFolder\**" />
+    <None Remove="wwwroot\js\app\src\moving\list\NewFolder\**" />
+    <None Remove="wwwroot\js\app\src\moving\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,9 +27,8 @@
   <ItemGroup>
     <Folder Include="wwwroot\fonts\" />
     <Folder Include="wwwroot\js\app\build\" />
-    <Folder Include="wwwroot\js\app\src\moving\list\" />
-    <Folder Include="wwwroot\js\app\src\moving\NewFolder\" />
-    <Folder Include="wwwroot\js\app\src\NewFolder\" />
+    <Folder Include="wwwroot\js\app\src\components\" />
+    <Folder Include="wwwroot\js\app\src\moving\list\store\" />
   </ItemGroup>
 
 </Project>
