@@ -60,112 +60,91 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
             if (request == null)
             {
                 response.IsSuccess = false;
-                response.Message = $"Некорректный, пустой запрос";
+                response.Message = "Некорректный, пустой запрос";
                 return response;
             }
 
             if (request.DepartureWarehouseId == null && request.ArrivalWarehouseId == null)
             {
                 response.IsSuccess = false;
-                response.Message = $"Не выбраны склады перемещения или расхода/прихода";
+                response.Message = "Не выбраны склады перемещения или расхода/прихода";
                 return response;
             }
             else if (request.DepartureWarehouseId == request.ArrivalWarehouseId)
             {
                 response.IsSuccess = false;
-                response.Message = $"Склад отправления не должен быть равен складу прибытия";
+                response.Message = "Склад отправления не должен быть равен складу прибытия";
                 return response;
             }
 
             if (request.InventoryItems.Count == 0)
             {
                 response.IsSuccess = false;
-                response.Message = $"Не выбраны перемещаемые ТМЦ";
+                response.Message = "Не выбраны перемещаемые ТМЦ";
+                return response;
+            }
+
+            var emptyInventoryItems = request.InventoryItems.Where(x => x.Count == 0);
+            if (emptyInventoryItems.Count() > 0)
+            {
+                response.IsSuccess = false;
+
+                var textIds = string.Join(", ", emptyInventoryItems.Select(x => x.Id));
+                response.Message = $"Номенклатуры с id={textIds} выбранно кл-во равное 0";
+                return response;
+            }
+
+            if (request.InventoryItems.GroupBy(x => x.Id).Select(x => x.Count()).Any(x => x > 1))
+            {
+                response.IsSuccess = false;
+                response.Message = "В одном перемещении не могут быть две одинаковые номенклатуры";
                 return response;
             }
 
             var warehouses = await _warehouseRepository.GetByIdsAsync(request.WarehouseIds);
 
-            Warehouse departureWarehouse = null;
-            if (request.IsMovingDepartureWarehouse)
+            if (request.IsMovingDepartureWarehouse && warehouses.Any(x => x.Id == request.DepartureWarehouseId.Value) == false)
             {
-                departureWarehouse = warehouses.FirstOrDefault(x => x.Id == request.DepartureWarehouseId.Value);
-                if (departureWarehouse == null)
-                {
-                    response.IsSuccess = false;
-                    response.Message = $"Склада отправления с id={request.DepartureWarehouseId.Value} не найдено";
-                    return response;
-                }
+                response.IsSuccess = false;
+                response.Message = $"Склада отправления с id={request.DepartureWarehouseId.Value} не найдено";
+                return response;
             }
 
-            if (request.IsMovingArrivalWarehouse)
+            if (request.IsMovingArrivalWarehouse && warehouses.Any(x => x.Id == request.ArrivalWarehouseId.Value) == false)
             {
-                var arrivalWarehouse = warehouses.FirstOrDefault(x => x.Id == request.ArrivalWarehouseId.Value);
-                if (arrivalWarehouse == null)
-                {
-                    response.IsSuccess = false;
-                    response.Message = $"Склада прибытия с id={request.ArrivalWarehouseId.Value} не найдено";
-                    return response;
-                }
+                response.IsSuccess = false;
+                response.Message = $"Склада прибытия с id={request.ArrivalWarehouseId.Value} не найдено";
+                return response;
             }
 
             var createInventoryItemIds = request.InventoryItems.Select(x => x.Id);
             var inventoryItems = await _inventoryItemRepository.GetByIdsAsync(createInventoryItemIds);
             var warehouseInventoryItems = await _warehouseInventoryItemRepository.GetAsync(request.WarehouseIds, createInventoryItemIds);
 
-            var inventoryItemIds = new List<int>();
             foreach (var createInventoryItem in request.InventoryItems)
             {
-                var inventoryItem = inventoryItems.FirstOrDefault(x => x.Id == createInventoryItem.Id);
-                if (inventoryItem == null)
+                if (inventoryItems.Any(x => x.Id == createInventoryItem.Id) == false)
                 {
                     response.IsSuccess = false;
-                    response.Message = $"Нуменклатуры с id={createInventoryItem.Id} не найдено";
-                    return response;
-                }
-
-                if (createInventoryItem.Count == 0)
-                {
-                    response.IsSuccess = false;
-                    response.Message = $"Нуменклатуры с id={createInventoryItem.Id} выбранно кл-во равное 0";
-                    return response;
-                }
-
-                if (inventoryItemIds.Contains(inventoryItem.Id))
-                {
-                    response.IsSuccess = false;
-                    response.Message = $"В одном перемещении не могут быть две одинаковые нуменклатуры";
+                    response.Message = $"Номенклатуры с id={createInventoryItem.Id} не найдено";
                     return response;
                 }
 
                 if (request.IsMovingDepartureWarehouse)
                 {
-                    var departureWarehouseInventoryItem = warehouseInventoryItems.FirstOrDefault(x => x.WarehouseId == request.DepartureWarehouseId.Value && x.InventoryItemId == inventoryItem.Id);
+                    var departureWarehouseInventoryItem = warehouseInventoryItems.FirstOrDefault(x => x.WarehouseId == request.DepartureWarehouseId.Value && x.InventoryItemId == createInventoryItem.Id);
+                    if (departureWarehouseInventoryItem == null)
+                    {
+                        response.IsSuccess = false;
+                        response.Message = $"У выбраного склада отправления с id={request.DepartureWarehouseId.Value} нет ТМЦ с id={createInventoryItem.Id}";
+                        return response;
+                    }
+
                     var newCountDeparture = departureWarehouseInventoryItem.Count - createInventoryItem.Count;
                     if (newCountDeparture < 0)
                     {
                         response.IsSuccess = false;
-                        response.Message = $"Нельзя расходовать нуменклатуру id={inventoryItem.Id} в кол-ве: {createInventoryItem.Count}. Недостаточно остатков на складе, остаток: {departureWarehouseInventoryItem.Count}";
-                        return response;
-                    }
-                }
-
-                inventoryItemIds.Add(inventoryItem.Id);
-
-                if (request.IsMovingDepartureWarehouse)
-                {
-                    var warehouseInventoryItem = warehouseInventoryItems.FirstOrDefault(x => x.WarehouseId == departureWarehouse.Id && x.InventoryItemId == createInventoryItem.Id);
-                    if (warehouseInventoryItem == null)
-                    {
-                        response.IsSuccess = false;
-                        response.Message = $"У выбраного склада отправления с id={departureWarehouse.Id} нет ТМЦ с id={createInventoryItem.Id}";
-                        return response;
-                    }
-
-                    if (warehouseInventoryItem.Count < createInventoryItem.Count)
-                    {
-                        response.IsSuccess = false;
-                        response.Message = $"У выбраного ТМЦ с id={createInventoryItem.Id} запрашивается больше товаров, чем имеется на складе отправления с id={departureWarehouse.Id}";
+                        response.Message = $"Нельзя расходовать нуменклатуру id={createInventoryItem.Id} в кол-ве: {createInventoryItem.Count}. Недостаточно остатков на складе, остаток: {departureWarehouseInventoryItem.Count}";
                         return response;
                     }
                 }

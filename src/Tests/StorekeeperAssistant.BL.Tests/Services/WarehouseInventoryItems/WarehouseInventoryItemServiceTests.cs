@@ -39,7 +39,19 @@ namespace StorekeeperAssistant.BL.Tests.Services.WarehouseInventoryItems
 
             var warehouseInventoryItems = new List<WarehouseInventoryItem>();
             foreach (var inventoryItemDTO in inventoryItemDTOs)
-                warehouseInventoryItems.Add(new Fixture().Build<WarehouseInventoryItem>().With(e => e.WarehouseId, warehouseId).With(x=>x.InventoryItemId, inventoryItemDTO.Id).Create());
+            {
+                var warehouseInventoryItem = new WarehouseInventoryItem 
+                {
+                    WarehouseId = warehouseId,
+                    InventoryItemId = inventoryItemDTO.Id,
+                    MovingId = 1,
+                    Count = 100,
+                    DateTime = DateTime.Now
+                };
+
+                warehouseInventoryItems.Add(warehouseInventoryItem);
+            }
+               
 
             _inventoryItemServiceMock
                 .Setup(a => a.GetAsync(It.IsAny<GetInventoryItemsRequest>()))

@@ -5,7 +5,7 @@
     GetWarehouses: "/warehouses/get",
 
     /**
-     * Получить нуменклатуры
+     * Получить номенклатуры
      */
     GetInventoryItems: "/inventory-items/get",
 

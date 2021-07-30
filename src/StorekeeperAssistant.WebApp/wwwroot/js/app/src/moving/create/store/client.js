@@ -10,7 +10,7 @@ const client = {
     */
     getWarehouses: () => axios.get(api.GetWarehouses),
     /**
-    * Получить нуменклатуры
+    * Получить номенклатуры
     */
     getInventoryItems: () => axios.get(api.GetInventoryItems),
     /**

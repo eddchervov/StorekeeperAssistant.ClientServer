@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace StorekeeperAssistant.DAL.Repositories
 {
-    public interface IInventoryItemRepository
+    public interface IInventoryItemRepository : IBaseRepository<InventoryItem>
     {
         Task<IEnumerable<InventoryItem>> GetAsync();
         Task<InventoryItem> GetByIdAsync(int id);
