@@ -20,3 +20,4 @@
 - Связь между проектами через Api
 - Db: MsSql
 - ORM: Entity Framework Core 3.0
+- NUnit тесты
