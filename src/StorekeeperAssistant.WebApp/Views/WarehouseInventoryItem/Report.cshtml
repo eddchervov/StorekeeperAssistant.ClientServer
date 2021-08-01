@@ -2,91 +2,9 @@
     ViewData["Title"] = "Отчет";
 }
 
-<div id="report-app">
-
-    <div class="row mb-2">
-        <div class="col-4 text-right">
-            <span class="line-h-text-by-input">Склад</span>
-        </div>
-        <div class="col-8">
-            <v-select :options="warehouseModels"
-                      :reduce="m => m.id"
-                      placeholder="Выберите склад"
-                      label="name"
-                      v-model="selectWarehouseId">
-                <template slot="no-options">
-                    Не найдено
-                </template>
-            </v-select>
-
-        </div>
-    </div>
-    <div class="row mb-2">
-        <div class="col-4 text-right">
-            <span class="line-h-text-by-input">Дата</span>
-        </div>
-        <div class="col-8">
-            <vue-ctk-date-time-picker class="date-input-vue-ctk"
-                                      format="DD-MM-YYYY HH:mm"
-                                      button-now-translation="Сейчас"
-                                      output-format="YYYY-MM-DD HH:mm"
-                                      :max-date="maxSelectDate"
-                                      no-clear-button="true"
-                                      label=""
-                                      v-model="selectDateTime">
-            </vue-ctk-date-time-picker>
-
-        </div>
-    </div>
-
-    <div class="row mb-4">
-        <div class="col-12 text-center">
-            <button class="btn btn-primary" @@click="click_get_report">
-                Получить
-            </button>
-        </div>
-    </div>
-
-    <h4 class="text-center" v-if="inventoryItemModels.length > 0 && isLoadForm == false">Отчет остатков по дате и времени</h4>
-    <h4 class="text-center" v-if="inventoryItemModels.length == 0 && isLoadForm == false">У склада нет ТМЦ</h4>
-    <div class="row" v-if="isLoadForm == true">
-        <div class="col-12 text-center text-primary">
-            Загрузка...
-        </div>
-    </div>
-    <table class="table table-bordered table-hover table-sm" v-if="inventoryItemModels.length > 0 && isLoadForm == false">
-        <thead class="thead-light thead-hermes">
-            <tr class="text-center bg-light">
-                <th class="align-middle"><b>Нуменклатура</b></th>
-                <th class="align-middle"><b>Остаток на складе</b></th>
-            </tr>
-        </thead>
-        <tbody class="body-hermes c-pointer text-center">
-            <tr v-for="(d, index) in inventoryItemModels">
-
-                <td class="align-middle" v-if="d.nomenclatureModel">{{d.nomenclatureModel.name}}</td>
-                <td class="align-middle" v-if="d.nomenclatureModel">{{d.count}}</td>
-            </tr>
-        </tbody>
-    </table>
-
-
-
-
-</div>
-
-
+<div id="report-app"></div>
 
 
 @section Scripts {
-    <script>
-        var getWarehousesUrl = "/warehouses/get";
-        var getByWarehouseIdWarehouseInventoryItemUrl = "/warehouse-inventory-items/get";
-    </script>
-    <environment include="Development">
-        <script src="~/js/warehouseInventoryItem/report.js" asp-append-version="true"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="~/js/warehouseInventoryItem/report.js"></script>
-    </environment>
+    <script src="~/app/build/report.js"></script>
 }

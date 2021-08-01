@@ -23,7 +23,7 @@ namespace StorekeeperAssistant.DAL.Repositories.Implementation
 
             if (maxDateTime != null)
             {
-                warehouseInventoryItems = warehouseInventoryItems.Where(x => x.DateTime < maxDateTime);
+                warehouseInventoryItems = warehouseInventoryItems.Where(x => x.DateTime <= maxDateTime);
             }
 
             return await warehouseInventoryItems.ToListAsync();

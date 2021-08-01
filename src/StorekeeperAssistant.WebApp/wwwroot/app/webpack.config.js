@@ -7,6 +7,7 @@ const config = {
     entry: {
         "moving-create": "./src/moving/create/index.js",
         "moving-list": "./src/moving/list/index.js",
+        "report": "./src/warehouseInventoryItem/report/index.js",
     },
     output: {
         path: path.resolve(__dirname, './build'),

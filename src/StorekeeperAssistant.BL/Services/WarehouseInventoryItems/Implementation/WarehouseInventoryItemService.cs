@@ -29,7 +29,8 @@ namespace StorekeeperAssistant.BL.Services.WarehouseInventoryItems.Implementatio
 
             var inventoryItemResponse = await _inventoryItemService.GetAsync(new GetInventoryItemsRequest());
 
-            _warehouseInventoryItems = await GetWarehouseInventoryItemsAsync(request.WarehouseId, inventoryItemResponse.InventoryItems.Select(x => x.Id), request.DateTime);
+            var inventoryItemIds = inventoryItemResponse.InventoryItems.Select(x => x.Id);
+            _warehouseInventoryItems = await GetWarehouseInventoryItemsAsync(request.WarehouseId, inventoryItemIds, request.DateTime);
 
             var warehouseInventoryItemDTOs = new List<WarehouseInventoryItemDTO>();
             foreach (var inventoryItem in inventoryItemResponse.InventoryItems)
