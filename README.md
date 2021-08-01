@@ -18,6 +18,6 @@
 - Server: Web Api (3 уровневая архитектура)
 - Client: MVC + Vue.js
 - Связь между проектами через Api
-- Db: MsSql
+- DB: MsSql
 - ORM: Entity Framework Core 3.0
 - NUnit тесты
