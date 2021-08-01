@@ -15,6 +15,8 @@
 
 Стек технологий:
 - ASP.NET Core 3.1
-- Web Api + (MVC + Vue.js)
-- MsSql
-- Entity Framework Core 3.0
+- Server: Web Api (3 уровневая архитектура)
+- Client: MVC + Vue.js
+- Связь между проектами через Api
+- Db: MsSql
+- ORM: Entity Framework Core 3.0
