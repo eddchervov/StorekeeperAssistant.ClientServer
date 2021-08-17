@@ -1,6 +1,6 @@
 using System;
 
-namespace StorekeeperAssistant.WebApp.Models
+namespace StorekeeperAssistant.Vue.WebApp.Models
 {
     public class ErrorViewModel
     {

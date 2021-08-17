@@ -3,7 +3,7 @@ using StorekeeperAssistant.Api.Models.Warehouses;
 using StorekeeperAssistant.Api.Services;
 using System.Threading.Tasks;
 
-namespace StorekeeperAssistant.WebApp.Controllers
+namespace StorekeeperAssistant.Vue.WebApp.Controllers
 {
     public class WarehouseController : Controller
     {

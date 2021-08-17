@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using StorekeeperAssistant.WebApp.Models;
+using StorekeeperAssistant.Vue.WebApp.Models;
 using System.Diagnostics;
 
-namespace StorekeeperAssistant.WebApp.Controllers
+namespace StorekeeperAssistant.Vue.WebApp.Controllers
 {
     public class HomeController : Controller
     {
