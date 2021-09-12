@@ -341,3 +341,4 @@ healthchecksdb
 /src/StorekeeperAssistant.WebApp/wwwroot/js/app/build
 /src/StorekeeperAssistant.DAL/Migrations
 /src/StorekeeperAssistant.WebApp/wwwroot/app/build
+/src/StorekeeperAssistant.Vue.WebApp/wwwroot/app/build
