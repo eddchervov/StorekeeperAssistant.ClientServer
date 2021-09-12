@@ -3,7 +3,7 @@
 
     <div>
 
-        <button class="btn btn-primary" @click="click_moving" :disabled="isCreateMoving">{{text}}</button>
+        <button class="btn btn-secondary" @click="click_moving" :disabled="isCreateMoving">{{text}}</button>
 
     </div>
 </template>

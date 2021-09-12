@@ -2,7 +2,7 @@ import Vue from "vue"
 import Vuex from "vuex"
 import api from "./api"
 import mutations from "./mutations"
-import { loadWarehouses, loadInventoryItems, loadDepartureWarehouseInventoryItems, loadArrivalWarehouseInventoryItems } from "./moving-loader"
+import { loadWarehouses, loadInventoryItems, loadDepartureWarehouseInventoryItems } from "./moving-loader"
 import { saveMoving } from "./moving-save"
 
 Vue.use(Vuex)
@@ -49,6 +49,8 @@ export default new Vuex.Store({
     mutations: {
         [mutations.setData]: (state, { name, value }) => state[name] = value,
         [mutations.setError]: (state, { msg }) => {
+            if (state.serverErrors.length > 2)
+                state.serverErrors.splice(0, 1);
             state.serverErrors.push(msg);
             setTimeout(() => {
                 var index = state.serverErrors.indexOf(msg);

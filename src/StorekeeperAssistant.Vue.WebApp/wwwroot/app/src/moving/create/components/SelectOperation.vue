@@ -2,10 +2,10 @@
 <template>
 
     <div class="row mb-2">
-        <div class="col-4 text-right">
+        <div class="col-md-3 mb-2">
             <span class="line-h-text-by-input">Тип операции</span>
         </div>
-        <div class="col-8">
+        <div class="col-md-9">
             <v-select v-model="selectOperation"
                       :options="$store.getters.typeOperations"
                       :placeholder="'Выберите тип операции'" />

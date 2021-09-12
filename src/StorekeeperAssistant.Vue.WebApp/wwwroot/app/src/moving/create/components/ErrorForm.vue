@@ -17,11 +17,16 @@
         z-index: 1;
         position: absolute;
         margin-left: auto;
-        margin-right: auto;
+        margin-right: 15px;
         left: 0;
         right: 0;
         text-align: center;
-        width: 50%;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .alert-danger {
+        padding: 10px;
     }
 </style>
 
