@@ -5,9 +5,9 @@
         <div class="row">
             <div class="col-6">
 
-                <!--Paging https://github.com/lokyoung/vuejs-paginate-->
+                <!-- Paging https://github.com/lokyoung/vuejs-paginate -->
                 <template v-if="totalPage > 1">
-                    <paginate v-model="currentPage"
+                    <vue-paginate v-model="currentPage"
                               :page-count="totalPage"
                               :page-range="5"
                               :margin-pages="1"
@@ -21,7 +21,7 @@
                               :prev-class="'page-item'"
                               :next-link-class="'page-link'"
                               :next-class="'page-item'">
-                    </paginate>
+                    </vue-paginate>
                 </template>
             </div>
             <div class="col-6">
@@ -29,21 +29,21 @@
                 <ul class="pagination float-right">
                     <li class="pt-1 mr-3">Кол-во элементов на страницу: </li>
                     <li class="page-item"
-                        v-bind:class="{ active: pageSize === 20 }"
+                        v-bind:class="{ 'active': pageSize === 20 }"
                         v-on:click="changePageSize(20)">
                         <button class="page-link">
                             20
                         </button>
                     </li>
                     <li class="page-item"
-                        v-bind:class="{ active: pageSize === 40 }"
+                        v-bind:class="{ 'active': pageSize === 40 }"
                         v-on:click="changePageSize(40)">
                         <button class="page-link">
                             40
                         </button>
                     </li>
                     <li class="page-item"
-                        v-bind:class="{ active: pageSize === 60 }"
+                        v-bind:class="{ 'active': pageSize === 60 }"
                         v-on:click="changePageSize(60)">
                         <button class="page-link">
                             60
@@ -55,7 +55,7 @@
         <template v-if="totalPage > 1">
             <div class="row">
                 <div class="col-6">
-                    <h7>{{message}}</h7>
+                    <span v-text="message"></span>
                 </div>
             </div>
         </template>
@@ -69,7 +69,7 @@
 
     export default {
         components: {
-            "paginate": Paginate
+            "vue-paginate": Paginate
         },
         props: {
             clickHandler: {
