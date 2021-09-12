@@ -16,12 +16,11 @@
     .error-box {
         z-index: 1;
         position: absolute;
-        margin-left: auto;
+        margin-left: 15px;
         margin-right: 15px;
-        left: 0;
         right: 0;
         text-align: center;
-        width: 100%;
+        width: 92%;
         max-width: 500px;
     }
 
