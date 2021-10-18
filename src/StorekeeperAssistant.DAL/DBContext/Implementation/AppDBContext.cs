@@ -8,7 +8,7 @@ namespace StorekeeperAssistant.DAL.DBContext.Implementation
         public AppDBContext(DbContextOptions options) : base(options)
         {
             //Database.EnsureDeleted();
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
         }
 
         public DbSet<Warehouse> Warehouses { get; set; }
