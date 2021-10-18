@@ -2,6 +2,8 @@
 <template>
 
     <div>
+        <h4>Отчет по остаткам</h4>
+        <hr class="mb-4" />
 
         <div class="row mb-2">
             <div class="col-4 text-right">

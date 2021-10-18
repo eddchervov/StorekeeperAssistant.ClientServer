@@ -3,31 +3,31 @@
 
     <div>
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-6">
 
                 <!-- Paging https://github.com/lokyoung/vuejs-paginate -->
                 <template v-if="totalPage > 1">
                     <vue-paginate v-model="currentPage"
-                              :page-count="totalPage"
-                              :page-range="5"
-                              :margin-pages="1"
-                              :click-handler="clickPaging"
-                              :prev-text="'Предыдущая'"
-                              :next-text="'Следующая'"
-                              :container-class="'pagination'"
-                              :page-link-class="'page-link'"
-                              :page-class="'page-item'"
-                              :prev-link-class="'page-link'"
-                              :prev-class="'page-item'"
-                              :next-link-class="'page-link'"
-                              :next-class="'page-item'">
+                                  :page-count="totalPage"
+                                  :page-range="5"
+                                  :margin-pages="1"
+                                  :click-handler="clickPaging"
+                                  :prev-text="'Предыдущая'"
+                                  :next-text="'Следующая'"
+                                  :container-class="'pagination'"
+                                  :page-link-class="'page-link'"
+                                  :page-class="'page-item'"
+                                  :prev-link-class="'page-link'"
+                                  :prev-class="'page-item'"
+                                  :next-link-class="'page-link'"
+                                  :next-class="'page-item'">
                     </vue-paginate>
                 </template>
             </div>
-            <div class="col-6">
+            <div class="col-md-6">
 
-                <ul class="pagination float-right">
-                    <li class="pt-1 mr-3">Кол-во элементов на страницу: </li>
+                <ul class="pagination float-md-end">
+                    <li class="pt-1 me-3">Кол-во элементов на страницу: </li>
                     <li class="page-item"
                         v-bind:class="{ 'active': pageSize === 20 }"
                         v-on:click="changePageSize(20)">
@@ -54,7 +54,7 @@
         </div>
         <template v-if="totalPage > 1">
             <div class="row">
-                <div class="col-6">
+                <div class="col-md-6">
                     <span v-text="message"></span>
                 </div>
             </div>

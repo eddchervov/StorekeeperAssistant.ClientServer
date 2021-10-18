@@ -2,6 +2,8 @@
 <template>
 
     <div>
+        <h4>Список перемещений</h4>
+        <hr class="mb-4" />
 
         <template v-if="isLoadPage">
 
@@ -18,7 +20,7 @@
             <div class="row">
                 <div class="col-12">
 
-                    <table class="table table-bordered table-hover table-sm">
+                    <table class="table table-responsive table-bordered table-hover table-sm">
                         <thead class="thead-light thead-hermes">
                             <tr class="text-center bg-light">
                                 <th class="align-middle"><b>Время</b></th>
@@ -43,7 +45,9 @@
                                 </td>
 
                                 <td class="text-center align-middle">
-                                    <button class="btn btn-sm btn-primary" v-on:click="deleteMovings(moving.id)">Удалить</button>
+                                    <img style="width: 18px; height: 18px; cursor: pointer;" 
+                                         src="trash.png" 
+                                         v-on:click="deleteMovings(moving.id)" />
                                 </td>
                             </tr>
                         </tbody>
@@ -53,11 +57,8 @@
 
         </template>
 
-        <div class="row">
-            <div class="col-12">
-                <paging :click-handler="getMovings" :totalCount="totalCount" />
-            </div>
-        </div>
+
+        <paging :click-handler="getMovings" :totalCount="totalCount" />
 
         <template v-if="isNotMovingAndIsLoadPage">
 
