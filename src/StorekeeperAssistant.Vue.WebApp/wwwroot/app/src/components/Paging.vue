@@ -52,7 +52,7 @@
                 </ul>
             </div>
         </div>
-        <template v-if="totalPage > 1">
+        <template v-if="totalPage > 1 && isMessage">
             <div class="row">
                 <div class="col-md-6">
                     <span v-text="message"></span>
@@ -80,7 +80,11 @@
             },
             totalCount: {
                 type: Number
-            }
+            },
+            isMessage: {
+                type: Boolean,
+                default: true
+            },
         },
         data() {
             return {

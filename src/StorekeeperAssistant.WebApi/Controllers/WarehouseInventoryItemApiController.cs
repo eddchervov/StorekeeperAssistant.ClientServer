@@ -18,8 +18,8 @@ namespace StorekeeperAssistant.WebApi.Controllers
             _validationWarehouseInventoryItemService = validationWarehouseInventoryItemService;
         }
 
-        [HttpGet("get")]
-        public async Task<GetWarehouseInventoryItemResponse> GetAsync(GetWarehouseInventoryItemRequest request)
+        [HttpPost("get")]
+        public async Task<GetWarehouseInventoryItemResponse> GetAsync([FromBody]GetWarehouseInventoryItemRequest request)
         {
             var response = new GetWarehouseInventoryItemResponse { IsSuccess = true, Message = string.Empty };
 

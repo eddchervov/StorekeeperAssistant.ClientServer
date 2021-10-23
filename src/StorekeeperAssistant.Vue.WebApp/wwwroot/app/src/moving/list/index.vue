@@ -15,9 +15,13 @@
 
         </template>
 
+
+
         <template v-if="isMovingAndIsLoadPage">
 
-            <div class="row">
+            <paging :click-handler="getMovings" :totalCount="totalCount" :is-message="false" />
+
+            <!--<div class="row">
                 <div class="col-12">
 
                     <table class="table table-responsive table-bordered table-hover table-sm">
@@ -45,20 +49,52 @@
                                 </td>
 
                                 <td class="text-center align-middle">
-                                    <img style="width: 18px; height: 18px; cursor: pointer;" 
-                                         src="trash.png" 
+                                    <img style="width: 18px; height: 18px; cursor: pointer;"
+                                         src="trash.png"
                                          v-on:click="deleteMovings(moving.id)" />
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+            </div>-->
+            <div class="row">
+                <div class="col-12 mb-2" v-for="(moving, index) in movings">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-2">Дата: <b>{{moving.dateTime | toLocalFormat}}</b></h5>
+                            <h6 class="card-subtitle mb-2">
+                                <template v-if="moving.departureWarehouse">
+                                    {{moving.departureWarehouse.name}}
+                                </template>
+                                <template v-else>
+                                    Извне
+                                </template>
+                                =>
+                                <template v-if="moving.arrivalWarehouse">
+                                    {{moving.arrivalWarehouse.name}}
+                                </template>
+                                <template v-else>
+                                    Убрано со складов
+                                </template>
+                            </h6>
+                            <div class="card-text">
+                                <p class="mb-0" v-for="md in moving.movingDetails">{{md.inventoryItem.name}}: {{md.count}} шт.</p>
+                            </div>
+                            <img class="del-btn text-red"
+                                 src="trash.png"
+                                 v-on:click="deleteMovings(moving.id)" />
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <paging :click-handler="getMovings" :totalCount="totalCount" />
 
         </template>
 
 
-        <paging :click-handler="getMovings" :totalCount="totalCount" />
+
 
         <template v-if="isNotMovingAndIsLoadPage">
 
@@ -73,6 +109,17 @@
 
     </div>
 </template>
+
+<style>
+    .del-btn {
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+    }
+</style>
 
 <script>
     import axios from "axios"
@@ -109,6 +156,8 @@
         },
         methods: {
             deleteMovings(movingId) {
+                var result = confirm("Действительно хотите удалить перемещение?");
+                if (!result) return
                 axios.post(deleteMovingsUrl, { MovingId: movingId })
                     .then((response) => {
                         if (response.data.isSuccess) {

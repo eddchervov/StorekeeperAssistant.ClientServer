@@ -134,20 +134,25 @@
         },
         methods: {
             click_get_report: function () {
-                if (!this.selectWarehouseId) alert('Выберите склад');
-                else this.getByWarehouseIdWarehouseInventoryItem();
+                if (!this.selectWarehouseId) {
+                    alert('Выберите склад');
+                    return;
+                }
+
+                this.getByWarehouseIdWarehouseInventoryItem();
             },
             getByWarehouseIdWarehouseInventoryItem: function () {
                 var vue = this;
                 vue.isLoadForm = true;
 
                 var date = null;
-                if (vue.isCurrentTime == false) date = moment(vue.selectDateTime);
-                else date = moment();
-
-                var dateUtc = date.utc();
-                var textDate = dateUtc.format('YYYY-DD-MM HH:mm:ss')
-                axios.get(getWarehouseInventoryItemByWarehouseIdUrl + '/' + vue.selectWarehouseId + '?DateTime=' + textDate)
+                if (vue.isCurrentTime == false) {
+                    date = moment(vue.selectDateTime);
+                    date = date.utc();
+                    date = date.format('YYYY-MM-DD HH:mm:ss')
+                }
+             
+                axios.get(getWarehouseInventoryItemByWarehouseIdUrl + '/' + vue.selectWarehouseId + '?DateTime=' + date)
                     .then((response) => {
                         vue.warehouseInventoryItems = response.data.warehouseInventoryItems;
                     })
