@@ -15,54 +15,13 @@
 
         </template>
 
-
-
         <template v-if="isMovingAndIsLoadPage">
 
-            <paging :click-handler="getMovings" :totalCount="totalCount" :is-message="false" />
-
-            <!--<div class="row">
-                <div class="col-12">
-
-                    <table class="table table-responsive table-bordered table-hover table-sm">
-                        <thead class="thead-light thead-hermes">
-                            <tr class="text-center bg-light">
-                                <th class="align-middle"><b>Время</b></th>
-                                <th class="align-middle"><b>Откуда</b></th>
-                                <th class="align-middle"><b>Куда</b></th>
-                                <th class="align-middle"><b>Перенесено</b></th>
-                                <th class="align-middle"></th>
-                            </tr>
-                        </thead>
-                        <tbody class="c-pointer text-center">
-                            <tr v-for="(moving, index) in movings">
-                                <td class="align-middle">{{moving.dateTime | toLocalFormat}}</td>
-
-                                <td class="align-middle" v-if="moving.departureWarehouse">{{moving.departureWarehouse.name}}</td>
-                                <td class="align-middle" v-if="!moving.departureWarehouse">Извне</td>
-
-                                <td class="align-middle" v-if="moving.arrivalWarehouse">{{moving.arrivalWarehouse.name}}</td>
-                                <td class="align-middle" v-if="!moving.arrivalWarehouse">Убрано со складов</td>
-
-                                <td class="align-middle">
-                                    <p class="mb-0" v-for="md in moving.movingDetails">{{md.inventoryItem.name}}: {{md.count}} шт.</p>
-                                </td>
-
-                                <td class="text-center align-middle">
-                                    <img style="width: 18px; height: 18px; cursor: pointer;"
-                                         src="trash.png"
-                                         v-on:click="deleteMovings(moving.id)" />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>-->
             <div class="row">
                 <div class="col-12 mb-2" v-for="(moving, index) in movings">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title mb-2">Дата: <b>{{moving.dateTime | toLocalFormat}}</b></h5>
+                            <h6 class="card-title mb-3">Дата: {{moving.dateTime | toLocalFormat}}</h6>
                             <h6 class="card-subtitle mb-2">
                                 <template v-if="moving.departureWarehouse">
                                     {{moving.departureWarehouse.name}}
@@ -70,7 +29,7 @@
                                 <template v-else>
                                     Извне
                                 </template>
-                                =>
+                                <img src="57116.png" class="right-btn" />
                                 <template v-if="moving.arrivalWarehouse">
                                     {{moving.arrivalWarehouse.name}}
                                 </template>
@@ -81,7 +40,7 @@
                             <div class="card-text">
                                 <p class="mb-0" v-for="md in moving.movingDetails">{{md.inventoryItem.name}}: {{md.count}} шт.</p>
                             </div>
-                            <img class="del-btn text-red"
+                            <img class="del-btn"
                                  src="trash.png"
                                  v-on:click="deleteMovings(moving.id)" />
                         </div>
@@ -89,11 +48,9 @@
                 </div>
             </div>
 
-            <paging :click-handler="getMovings" :totalCount="totalCount" />
-
         </template>
 
-
+        <paging v-show="isMovingAndIsLoadPage" :click-handler="getMovings" :totalCount="totalCount" />
 
 
         <template v-if="isNotMovingAndIsLoadPage">
@@ -118,6 +75,10 @@
         width: 16px;
         height: 16px;
         cursor: pointer;
+    }
+    .right-btn {
+        width: 19px;
+        height: 17px;
     }
 </style>
 

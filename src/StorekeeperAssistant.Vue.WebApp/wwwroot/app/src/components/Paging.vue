@@ -84,7 +84,7 @@
             isMessage: {
                 type: Boolean,
                 default: true
-            },
+            }
         },
         data() {
             return {
