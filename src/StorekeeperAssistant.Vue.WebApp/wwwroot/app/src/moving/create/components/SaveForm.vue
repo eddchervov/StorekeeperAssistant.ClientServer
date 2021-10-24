@@ -4,8 +4,8 @@
 
     <div>
 
-        <div class="row mb-4">
-            <div class="col-12 text-center">
+        <div class="row mt-3">
+            <div class="col-12 text-end">
 
                 <template v-if="isMovingAndSelectDepartureAndArrival">
                     <save-moving :text="'Переместить'" />

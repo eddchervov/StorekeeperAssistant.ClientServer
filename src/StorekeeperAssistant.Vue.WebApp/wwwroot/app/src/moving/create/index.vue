@@ -1,33 +1,39 @@
 ﻿
 <template>
 
-    <div>
+    <div class="row">
+        <div class="col-md-12">
 
-        <template>
-            <error-form />
-        </template>
+            <h4>Создание перемещения</h4>
+            <hr class="mb-4" />
 
-        <template>
-            <select-operation />
-        </template>
+            <template>
+                <error-form />
+            </template>
 
-        <template v-if="isComing">
-            <coming-form />
-        </template>
+            <template>
+                <select-operation />
+            </template>
 
-        <template v-if="isConsumption">
-            <consumption-form />
-        </template>
+            <template v-if="isComing">
+                <coming-form />
+            </template>
 
-        <template v-if="isMoving">
-            <moving-form />
-        </template>
+            <template v-if="isConsumption">
+                <consumption-form />
+            </template>
 
-        <template>
-            <save-form />
-        </template>
+            <template v-if="isMoving">
+                <moving-form />
+            </template>
 
+            <template>
+                <save-form />
+            </template>
+
+        </div>
     </div>
+
 </template>
 
 <script>
@@ -51,6 +57,9 @@
             "error-form": ErrorForm
         },
         computed: {
+            inventoryItems() {
+                return this.$store.getters.inventoryItems
+            },
             isMoving() {
                 return this.$store.state.selectOperation == this.$store.state.operation.MOVING
             },

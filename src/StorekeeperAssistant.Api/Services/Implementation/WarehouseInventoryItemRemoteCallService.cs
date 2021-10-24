@@ -14,6 +14,6 @@ namespace StorekeeperAssistant.Api.Services.Implementation
         protected override string _apiSchemeAndHostConfigKey { get; set; } = "StorekeeperAssistant.Api.SchemeAndHost";
 
         public async Task<GetWarehouseInventoryItemResponse> GetAsync(GetWarehouseInventoryItemRequest request)
-            => await ExecuteGetAsync<GetWarehouseInventoryItemResponse, GetWarehouseInventoryItemRequest>("api/warehouse-inventory-items/get", request);
+            => await ExecutePostAsync<GetWarehouseInventoryItemResponse, GetWarehouseInventoryItemRequest>("api/warehouse-inventory-items/get", request);
     }
 }

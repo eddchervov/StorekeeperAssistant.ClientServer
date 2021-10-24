@@ -2,10 +2,10 @@
 <template>
 
     <div class="row mb-2">
-        <div class="col-4 text-right">
+        <div class="col-md-4 mb-2">
             <span class="line-h-text-by-input">Склад прибытия (Приход)</span>
         </div>
-        <div class="col-8">
+        <div class="col-md-8">
             <v-select v-model="selectArrivalWarehouseId"
                       :options="arrivalWarehouses"
                       :placeholder="'Выберите склад прибытия'" />

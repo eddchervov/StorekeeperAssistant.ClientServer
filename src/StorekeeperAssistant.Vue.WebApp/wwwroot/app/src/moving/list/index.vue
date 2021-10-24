@@ -2,6 +2,8 @@
 <template>
 
     <div>
+        <h4>Список перемещений</h4>
+        <hr class="mb-4" />
 
         <template v-if="isLoadPage">
 
@@ -16,48 +18,40 @@
         <template v-if="isMovingAndIsLoadPage">
 
             <div class="row">
-                <div class="col-12">
-
-                    <table class="table table-bordered table-hover table-sm">
-                        <thead class="thead-light thead-hermes">
-                            <tr class="text-center bg-light">
-                                <th class="align-middle"><b>Время</b></th>
-                                <th class="align-middle"><b>Откуда</b></th>
-                                <th class="align-middle"><b>Куда</b></th>
-                                <th class="align-middle"><b>Перенесено</b></th>
-                                <th class="align-middle"></th>
-                            </tr>
-                        </thead>
-                        <tbody class="c-pointer text-center">
-                            <tr v-for="(moving, index) in movings">
-                                <td class="align-middle">{{moving.dateTime | toLocalFormat}}</td>
-
-                                <td class="align-middle" v-if="moving.departureWarehouse">{{moving.departureWarehouse.name}}</td>
-                                <td class="align-middle" v-if="!moving.departureWarehouse">Извне</td>
-
-                                <td class="align-middle" v-if="moving.arrivalWarehouse">{{moving.arrivalWarehouse.name}}</td>
-                                <td class="align-middle" v-if="!moving.arrivalWarehouse">Убрано со складов</td>
-
-                                <td class="align-middle">
-                                    <p class="mb-0" v-for="md in moving.movingDetails">{{md.inventoryItem.name}}: {{md.count}} шт.</p>
-                                </td>
-
-                                <td class="text-center align-middle">
-                                    <button class="btn btn-sm btn-primary" v-on:click="deleteMovings(moving.id)">Удалить</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="col-12 mb-2" v-for="(moving, index) in movings">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title mb-3">Дата: {{moving.dateTime | toLocalFormat}}</h6>
+                            <h6 class="card-subtitle mb-2">
+                                <template v-if="moving.departureWarehouse">
+                                    {{moving.departureWarehouse.name}}
+                                </template>
+                                <template v-else>
+                                    Извне
+                                </template>
+                                <img src="57116.png" class="right-btn" />
+                                <template v-if="moving.arrivalWarehouse">
+                                    {{moving.arrivalWarehouse.name}}
+                                </template>
+                                <template v-else>
+                                    Убрано со складов
+                                </template>
+                            </h6>
+                            <div class="card-text">
+                                <p class="mb-0" v-for="md in moving.movingDetails">{{md.inventoryItem.name}}: {{md.count}} шт.</p>
+                            </div>
+                            <img class="del-btn"
+                                 src="trash.png"
+                                 v-on:click="deleteMovings(moving.id)" />
+                        </div>
+                    </div>
                 </div>
             </div>
 
         </template>
 
-        <div class="row">
-            <div class="col-12">
-                <paging :click-handler="getMovings" :totalCount="totalCount" />
-            </div>
-        </div>
+        <paging v-show="isMovingAndIsLoadPage" :click-handler="getMovings" :totalCount="totalCount" />
+
 
         <template v-if="isNotMovingAndIsLoadPage">
 
@@ -72,6 +66,21 @@
 
     </div>
 </template>
+
+<style>
+    .del-btn {
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+    }
+    .right-btn {
+        width: 19px;
+        height: 17px;
+    }
+</style>
 
 <script>
     import axios from "axios"
@@ -108,6 +117,8 @@
         },
         methods: {
             deleteMovings(movingId) {
+                var result = confirm("Действительно хотите удалить перемещение?");
+                if (!result) return
                 axios.post(deleteMovingsUrl, { MovingId: movingId })
                     .then((response) => {
                         if (response.data.isSuccess) {

@@ -16,12 +16,16 @@
     .error-box {
         z-index: 1;
         position: absolute;
-        margin-left: auto;
-        margin-right: auto;
-        left: 0;
+        margin-left: 15px;
+        margin-right: 15px;
         right: 0;
         text-align: center;
-        width: 50%;
+        width: 92%;
+        max-width: 500px;
+    }
+
+    .alert-danger {
+        padding: 10px;
     }
 </style>
 
