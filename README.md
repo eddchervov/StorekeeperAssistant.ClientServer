@@ -18,11 +18,19 @@
 
 <br>
 
-Стек технологий:
-- ASP.NET Core 3.1
-- Server: Web Api (3 уровневая архитектура)
-- Client: MVC + Vue.js
-- Связь между проектами через Api
-- DB: MsSql
-- ORM: Entity Framework Core 3.0
-- NUnit тесты
+<p class="card-subtitle mb-1">
+  <b>Стек технологий.</b>
+</p>
+<ul>
+  <li>ASP.NET Core 3.1.</li>
+  <li><b>Server: </b> Web Api (3 уровневая архитектура - Bl, Dal, WebApi).</li>
+  <li><b>Client: </b> WebApp MVC + Webpack + Vue 2 + Vuex + доп. библиотеки
+    (<a target="_blank" href="https://github.com/sagalbot/vue-select">vue-select</a>, 
+    <a target="_blank" href="https://github.com/chronotruck/vue-ctk-date-time-picker">vue-ctk-date-time-picker</a>,
+    <a target="_blank" href="https://github.com/lokyoung/vuejs-paginate">vuejs-paginate</a>).
+  </li>
+  <li><b>Client: </b>WebApp MVC общается с <b>Server: </b> WebApi через Api библиотеку.</li>
+  <li><b>База данных: </b> MsSql</li>
+  <li><b>ORM: </b> Entity Framework Core 3</li>
+  <li>NUnit тесты</li>
+</ul>
