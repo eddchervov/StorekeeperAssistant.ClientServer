@@ -144,7 +144,7 @@ namespace StorekeeperAssistant.BL.Services.Movings.Implementation
                     if (newCountDeparture < 0)
                     {
                         response.IsSuccess = false;
-                        response.Message = $"Нельзя расходовать нуменклатуру id={createInventoryItem.Id} в кол-ве: {createInventoryItem.Count}. Недостаточно остатков на складе, остаток: {departureWarehouseInventoryItem.Count}";
+                        response.Message = $"Нельзя расходовать номенклатуру id={createInventoryItem.Id} в кол-ве: {createInventoryItem.Count}. Недостаточно остатков на складе, остаток: {departureWarehouseInventoryItem.Count}";
                         return response;
                     }
                 }
