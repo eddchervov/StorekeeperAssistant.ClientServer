@@ -66,7 +66,7 @@
             <table class="table table-bordered table-hover table-sm">
                 <thead class="thead-light thead-hermes">
                     <tr class="text-center bg-light">
-                        <th class="align-middle"><b>Нуменклатура</b></th>
+                        <th class="align-middle"><b>Номенклатура</b></th>
                         <th class="align-middle"><b>Остаток на складе</b></th>
                     </tr>
                 </thead>
